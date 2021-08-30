@@ -11,9 +11,24 @@ using SharpGL.SceneGraph;
 
 namespace OpenGL_Util
 {
+    public interface IRenderObject : ITransform, IDrawable
+    {
+    }
+
     public interface IDrawable
     {
         void Draw(OpenGL gl, Vector3 offset);
+    }
+
+    public interface ITransform
+    {
+        public Vector3 Position { get; }
+        public Quaternion Rotation { get; }
+        public Vector3 Scale { get; }
+
+        public Vector3 Forward => Rotation.Forward();
+        public Vector3 Up => Rotation.Up();
+        public Vector3 Left => Rotation.Left();
     }
 
     public static class Extensions
