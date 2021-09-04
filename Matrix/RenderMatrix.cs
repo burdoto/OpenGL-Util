@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -49,6 +50,7 @@ namespace OpenGL_Util.Matrix
 
         public void Draw(OpenGL gl, Vector3 offset)
         {
+            Debug.WriteLine("Drawing Matrix");
             foreach (var draw in _matrix.Values
                 .SelectMany(it => it.Values)
                 .SelectMany(it => it.Values))
