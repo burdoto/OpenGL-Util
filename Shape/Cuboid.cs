@@ -92,63 +92,63 @@ namespace OpenGL_Util.Shape
             switch (side)
             {
                 case Side.TOP:
-                    gl.TexCoord(1, 1);
+                    //gl.TexCoord(1, 1);
                     gl.Vertex(*pax, *pay, *pbz); // Top Right Of The Quad (Top)
-                    gl.TexCoord(0, 1);
+                    //gl.TexCoord(0, 1);
                     gl.Vertex(*pbx, *pay, *pbz); // Top Left Of The Quad (Top)
-                    gl.TexCoord(0, 0);
+                    //gl.TexCoord(0, 0);
                     gl.Vertex(*pbx, *pay, *paz); // Bottom Left Of The Quad (Top)
-                    gl.TexCoord(1, 0);
+                    //gl.TexCoord(1, 0);
                     gl.Vertex(*pax, *pay, *paz); // Bottom Right Of The Quad (Top)
                     break;
                 case Side.BOTTOM:
-                    gl.TexCoord(1, 1);
+                    //gl.TexCoord(1, 1);
                     gl.Vertex(*pax, *pby, *paz); // Top Right Of The Quad (Bottom)
-                    gl.TexCoord(0, 1);
+                    //gl.TexCoord(0, 1);
                     gl.Vertex(*pbx, *pby, *paz); // Top Left Of The Quad (Bottom)
-                    gl.TexCoord(0, 0);
+                    //gl.TexCoord(0, 0);
                     gl.Vertex(*pbx, *pby, *pbz); // Bottom Left Of The Quad (Bottom)
-                    gl.TexCoord(1, 0);
+                    //gl.TexCoord(1, 0);
                     gl.Vertex(*pax, *pby, *pbz); // Bottom Right Of The Quad (Bottom)
                     break;
                 case Side.LEFT:
-                    gl.TexCoord(1, 1);
+                    //gl.TexCoord(1, 1);
                     gl.Vertex(*pbx, *pay, *paz); // Top Right Of The Quad (Left)
-                    gl.TexCoord(0, 1);
+                    //gl.TexCoord(0, 1);
                     gl.Vertex(*pbx, *pay, *pbz); // Top Left Of The Quad (Left)
-                    gl.TexCoord(0, 0);
+                    //gl.TexCoord(0, 0);
                     gl.Vertex(*pbx, *pby, *pbz); // Bottom Left Of The Quad (Left)
-                    gl.TexCoord(1, 0);
+                    //gl.TexCoord(1, 0);
                     gl.Vertex(*pbx, *pby, *paz); // Bottom Right Of The Quad (Left)
                     break;
                 case Side.RIGHT:
-                    gl.TexCoord(1, 1);
+                    //gl.TexCoord(1, 1);
                     gl.Vertex(*pax, *pay, *pbz); // Top Right Of The Quad (Right)
-                    gl.TexCoord(0, 1);
+                    //gl.TexCoord(0, 1);
                     gl.Vertex(*pax, *pay, *paz); // Top Left Of The Quad (Right)
-                    gl.TexCoord(0, 0);
+                    //gl.TexCoord(0, 0);
                     gl.Vertex(*pax, *pby, *paz); // Bottom Left Of The Quad (Right)
-                    gl.TexCoord(1, 0);
+                    //gl.TexCoord(1, 0);
                     gl.Vertex(*pax, *pby, *pbz); // Bottom Right Of The Quad (Right)
                     break;
                 case Side.FRONT:
-                    gl.TexCoord(1, 1);
+                    //gl.TexCoord(1, 1);
                     gl.Vertex(*pax, *pay, *paz); // Top Right Of The Quad (Front)
-                    gl.TexCoord(0, 1);
+                    //gl.TexCoord(0, 1);
                     gl.Vertex(*pbx, *pay, *paz); // Top Left Of The Quad (Front)
-                    gl.TexCoord(0, 0);
+                    //gl.TexCoord(0, 0);
                     gl.Vertex(*pbx, *pby, *paz); // Bottom Left Of The Quad (Front)
-                    gl.TexCoord(1, 0);
+                    //gl.TexCoord(1, 0);
                     gl.Vertex(*pax, *pby, *paz); // Bottom Right Of The Quad (Front)
                     break;
                 case Side.BACK:
-                    gl.TexCoord(1, 1);
+                    //gl.TexCoord(1, 1);
                     gl.Vertex(*pax, *pby, *pbz); // Bottom Left Of The Quad (Back)
-                    gl.TexCoord(0, 1);
+                    //gl.TexCoord(0, 1);
                     gl.Vertex(*pbx, *pby, *pbz); // Bottom Right Of The Quad (Back)
-                    gl.TexCoord(0, 0);
+                    //gl.TexCoord(0, 0);
                     gl.Vertex(*pbx, *pay, *pbz); // Top Right Of The Quad (Back)
-                    gl.TexCoord(1, 0);
+                    //gl.TexCoord(1, 0);
                     gl.Vertex(*pax, *pay, *pbz); // Top Left Of The Quad (Back)
                     break;
                 default:
