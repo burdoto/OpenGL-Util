@@ -57,9 +57,9 @@ namespace OpenGL_Util.Matrix
                 draw?.Draw(gl, offset);
         }
 
-        public static IRenderObject operator +(RenderMatrix matrix, IRenderObject it)
+        public T AddRenderObject<T>(IRenderObject it) where T : IRenderObject
         {
-            return matrix[it.Position] = it;
+            return (T) (this[it.Position] = it);
         }
     }
 }
