@@ -59,7 +59,7 @@ namespace OpenGL_Util.Shape
 
         public unsafe void Draw(OpenGL gl, Vector3 offset)
         {
-            gl.Color(0.7, 0.7, 0.7);
+            gl.Color(Color);
 
             var position = _pos + offset.Vertex();
             Debug.WriteLine("Drawing " + Color + " Cube at " + position);
@@ -84,7 +84,6 @@ namespace OpenGL_Util.Shape
         {
             if (!NeedRenderSide(side))
                 return;
-            gl.Color(Color);
 
             gl.Begin(BeginMode.Quads);
             float* pax = pa + 0, pay = pa + 1, paz = pa + 2;
