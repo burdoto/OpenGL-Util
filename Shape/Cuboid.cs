@@ -62,7 +62,7 @@ namespace OpenGL_Util.Shape
             gl.Color(Color);
 
             var position = _pos + offset.Vertex();
-            Debug.WriteLine("Drawing " + Color + " Cube at " + position);
+            //Debug.WriteLine("Drawing " + Color + " Cube at " + position);
             var scale = _scale;
             float[] pa = position + scale;
             float[] pb = position - scale;

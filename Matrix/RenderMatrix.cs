@@ -50,7 +50,7 @@ namespace OpenGL_Util.Matrix
 
         public void Draw(OpenGL gl, Vector3 offset)
         {
-            Debug.WriteLine("Drawing Matrix");
+            //Debug.WriteLine("Drawing Matrix");
             foreach (var draw in _matrix.Values
                 .SelectMany(it => it.Values)
                 .SelectMany(it => it.Values))
@@ -60,6 +60,12 @@ namespace OpenGL_Util.Matrix
         public T AddRenderObject<T>(IRenderObject it) where T : IRenderObject
         {
             return (T) (this[it.Position] = it);
+        }
+
+        public void AddRenderObjects(params IRenderObject[] objs)
+        {
+            foreach (var obj in objs)
+                AddRenderObject<IRenderObject>(obj);
         }
     }
 }
