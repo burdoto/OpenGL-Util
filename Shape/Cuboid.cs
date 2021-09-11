@@ -25,8 +25,7 @@ namespace OpenGL_Util.Shape
             FRONT = 0x4,
             BACK = -0x4
         }
-
-        private Vertex[][] _vertices;
+        
         private Vertex _pos;
         private Vertex _scale;
 
