@@ -56,7 +56,7 @@ namespace OpenGL_Util.Shape
 
         public Quaternion Rotation => Quaternion.Identity;
 
-        public unsafe void Draw(OpenGL gl, Vector3 offset)
+        public unsafe void Draw(OpenGL gl, Vector3 offset, ITransform camera)
         {
             gl.Color(Color);
 

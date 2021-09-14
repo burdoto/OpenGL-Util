@@ -17,7 +17,7 @@ namespace OpenGL_Util
 
     public interface IDrawable
     {
-        void Draw(OpenGL gl, Vector3 offset);
+        void Draw(OpenGL gl, Vector3 offset, ITransform camera);
     }
 
     public interface ITransform
