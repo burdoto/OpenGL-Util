@@ -48,13 +48,13 @@ namespace OpenGL_Util.Matrix
                 .TryAdd(z, value);
         }
 
-        public void Draw(OpenGL gl, Vector3 offset, ITransform camera)
+        public void Draw(OpenGL gl, ITransform camera)
         {
             //Debug.WriteLine("Drawing Matrix");
             foreach (var draw in _matrix.Values
                 .SelectMany(it => it.Values)
                 .SelectMany(it => it.Values))
-                draw?.Draw(gl, offset, camera);
+                draw?.Draw(gl, camera);
         }
 
         public T AddRenderObject<T>(IRenderObject it) where T : IRenderObject
