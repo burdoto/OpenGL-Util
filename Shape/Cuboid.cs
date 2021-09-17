@@ -7,7 +7,7 @@ using SharpGL.SceneGraph;
 
 namespace OpenGL_Util.Shape
 {
-    public class Cuboid : IGameObject, IRenderObject
+    public class Cuboid : IRenderObject
     {
         [Flags]
         public enum Side
@@ -49,8 +49,6 @@ namespace OpenGL_Util.Shape
             get => _transform.Scale;
             set => _transform.Scale = value;
         }
-
-        public IRenderObject RenderObject => this;
 
         public unsafe void Draw(OpenGL gl, ITransform camera)
         {
