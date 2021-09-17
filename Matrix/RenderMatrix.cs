@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using SharpGL;
+﻿using SharpGL;
 
 namespace OpenGL_Util.Matrix
 {
@@ -14,13 +6,13 @@ namespace OpenGL_Util.Matrix
     {
         public readonly GridMatrix Grid;
 
-        public RenderMatrix() : this(new MapMatrix3())
+        public RenderMatrix() : this(new MapMatrix())
         {
         }
 
         public RenderMatrix(GridMatrix grid)
         {
-            this.Grid = grid;
+            Grid = grid;
         }
 
         public void Draw(OpenGL gl, ITransform camera)
@@ -30,17 +22,20 @@ namespace OpenGL_Util.Matrix
                 draw?.Draw(gl, camera);
         }
 
-        public T AddRenderObject<T>(IRenderObject it) where T : IRenderObject
+        public IGameObject AddGameObject(IGameObject it)
         {
-            return (T) (Grid[it.Position] = it);
+            return Grid[it.Position] = it;
         }
 
-        public void AddRenderObjects(params IRenderObject[] objs)
+        public void AddGameObjects(params IGameObject[] objs)
         {
             foreach (var obj in objs)
-                AddRenderObject<IRenderObject>(obj);
+                AddGameObject(obj);
         }
 
-        public void Clear() => Grid.Clear();
+        public void Clear()
+        {
+            Grid.Clear();
+        }
     }
 }

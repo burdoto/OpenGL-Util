@@ -7,95 +7,91 @@ namespace OpenGL_Util.Matrix
 {
     public abstract class GridMatrix
     {
-        public IRenderObject? this[Vector2 vec]
-        {
-            get => this[(int) vec.X, (int) vec.Y];
-            set => this[(int) vec.X, (int) vec.Y] = value;
-        }
-
-        public IRenderObject? this[int x, int y]
+        public IGameObject? this[int x, int y]
         {
             get => this[x, y, 0];
             set => this[x, y, 0] = value;
         }
 
-        public IRenderObject? this[Vector3 vec]
+        public IGameObject? this[Vector2 vec]
         {
-            get => this[(int) vec.X, (int) vec.Y, (int) vec.Z];
-            set => this[(int) vec.X, (int) vec.Y, (int) vec.Z] = value;
+            get => this[new Vector3(vec, 0)];
+            set => this[new Vector3(vec, 0)] = value;
         }
 
-        public abstract IRenderObject? this[int x, int y, int z] { get; set; }
+        public IGameObject? this[int x, int y, int z]
+        {
+            get => this[x, y, z];
+            set => this[x, y, z] = value;
+        }
+
+        public abstract IGameObject? this[Vector3 vec] { get; set; }
 
         public abstract IEnumerable<IRenderObject?> GetVisibles(ITransform? camera);
 
         public abstract void Clear();
     }
 
-    public class MapMatrix2 : GridMatrix
+    public class ListMatrix : GridMatrix
     {
-        private readonly
-            ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>> _matrix =
-                new ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>();
-        public override IRenderObject? this[int x, int y, int z]
+        private readonly List<IGameObject> _objs = new List<IGameObject>();
+
+        public override IGameObject? this[Vector3 vec]
         {
-            get
-            {
-                _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, IRenderObject?>())
-                    .TryGetValue(y, out IRenderObject? draw);
-                return draw;
-            }
-            set => _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, IRenderObject?>())
-                .TryAdd(y, value);
+            get => _objs.First(it => it.Position == vec);
+            set => _objs[_objs.FindIndex(it => it.Position == vec)] = value!;
         }
 
         public override IEnumerable<IRenderObject?> GetVisibles(ITransform? camera)
         {
-            return _matrix.Values.SelectMany(y => y.Values);
+            return _objs.Select(it => it.RenderObject);
         }
 
         public override void Clear()
         {
-            foreach (var xStage in _matrix.Values) 
-                xStage.Clear();
-            _matrix.Clear();
+            _objs.Clear();
         }
     }
 
-    public class MapMatrix3 : GridMatrix
+    public class MapMatrix : GridMatrix
     {
         private readonly
-            ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>> _matrix =
-                new ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>>();
-        public override IRenderObject? this[int x, int y, int z]
+            ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IGameObject?>>> _matrix =
+                new ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IGameObject?>>>();
+
+        public override IGameObject? this[Vector3 vec]
         {
             get
             {
-                _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>())
-                    .GetOrAdd(y, key => new ConcurrentDictionary<int, IRenderObject?>())
-                    .TryGetValue(z, out IRenderObject? draw);
+                _matrix.GetOrAdd((int)vec.X,
+                        key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IGameObject?>>())
+                    .GetOrAdd((int)vec.Y, key => new ConcurrentDictionary<int, IGameObject?>())
+                    .TryGetValue((int)vec.Z, out var draw);
                 return draw;
             }
-            set => _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>())
-                .GetOrAdd(y, key => new ConcurrentDictionary<int, IRenderObject?>())
-                .TryAdd(z, value);
+            set => _matrix.GetOrAdd((int)vec.X,
+                    key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IGameObject?>>())
+                .GetOrAdd((int)vec.Y, key => new ConcurrentDictionary<int, IGameObject?>())
+                .TryAdd((int)vec.Z, value);
         }
 
         public override IEnumerable<IRenderObject?> GetVisibles(ITransform? camera)
         {
             return _matrix.Values
                 .SelectMany(x => x.Values)
-                .SelectMany(y => y.Values);
+                .SelectMany(y => y.Values)
+                .Select(it => it?.RenderObject);
         }
 
         public override void Clear()
         {
             foreach (var xStage in _matrix.Values)
             {
-                foreach (var yStage in xStage.Values) 
+                foreach (var yStage in xStage.Values)
                     yStage.Clear();
                 xStage.Clear();
             }
+
             _matrix.Clear();
         }
     }

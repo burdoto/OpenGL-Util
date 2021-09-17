@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
-using System.Text;
 using SharpGL;
 using SharpGL.Enumerations;
 using SharpGL.SceneGraph;
-using SharpGL.SceneGraph.Assets;
 
 namespace OpenGL_Util.Shape
 {
-    public class Cuboid : IRenderObject
+    public class Cuboid : IGameObject, IRenderObject
     {
         [Flags]
         public enum Side
@@ -25,7 +21,7 @@ namespace OpenGL_Util.Shape
             FRONT = 0x4,
             BACK = -0x4
         }
-        
+
         private Vertex _pos;
         private Vertex _scale;
 
@@ -40,13 +36,13 @@ namespace OpenGL_Util.Shape
             Scale = scale / 2;
         }
 
+        public Color Color { get; }
+
         public Vector3 Position
         {
             get => _pos.Vector();
             set => _pos = value.Vertex();
         }
-
-        public Color Color { get; }
 
         public Vector3 Scale
         {
@@ -55,6 +51,8 @@ namespace OpenGL_Util.Shape
         }
 
         public Quaternion Rotation => Quaternion.Identity;
+
+        public IRenderObject RenderObject => this;
 
         public unsafe void Draw(OpenGL gl, ITransform camera)
         {
@@ -152,6 +150,7 @@ namespace OpenGL_Util.Shape
                 default:
                     throw new ArgumentOutOfRangeException(nameof(side), side, "Invalid Side");
             }
+
             gl.End();
         }
 
