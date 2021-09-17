@@ -32,23 +32,11 @@ namespace OpenGL_Util.Shape
 
         public Color Color { get; }
 
-        public Vector3 Position
-        {
-            get => _transform.Position;
-            set => _transform.Position = value;
-        }
+        public Vector3 Position => _transform.Position;
 
-        public Quaternion Rotation
-        {
-            get => Quaternion.Identity;
-            set => throw new NotSupportedException();
-        }
+        public Quaternion Rotation => _transform.Rotation;
 
-        public Vector3 Scale
-        {
-            get => _transform.Scale;
-            set => _transform.Scale = value;
-        }
+        public Vector3 Scale => _transform.Scale;
 
         public unsafe void Draw(OpenGL gl, ITransform camera)
         {
