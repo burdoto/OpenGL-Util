@@ -39,6 +39,9 @@ namespace OpenGL_Util.Shape
 
         public void Draw(OpenGL gl, ITransform camera)
         {
+            if (!Loaded)
+                return;
+            
             var offset = Position.Vertex();
             
             gl.Begin(BeginMode.Triangles);
