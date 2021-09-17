@@ -8,21 +8,21 @@ namespace OpenGL_Util
 {
     public interface IContainer : IDisposable
     {
-        IEnumerable<IContainer> Children { get; }
+        IEnumerable<IDisposable> Children { get; }
 
-        bool AddChild(IContainer container);
+        bool AddChild(IDisposable container);
 
-        bool RemoveChild(IContainer container);
+        bool RemoveChild(IDisposable container);
     }
 
-    public interface ILoadable
+    public interface ILoadable : IDisposable
     {
         bool Loaded { get; }
         bool Load();
         void Unload();
     }
 
-    public interface IEnableable
+    public interface IEnableable : IDisposable
     {
         bool Enabled { get; }
 
@@ -62,30 +62,17 @@ namespace OpenGL_Util
 
     public static class Extensions
     {
-        public static Vertex Vertex(this Vector3 a)
-        {
-            return new Vertex(a.X, a.Y, a.Z);
-        }
+        public static Vertex Vertex(this Vector3 a) => new Vertex(a.X, a.Y, a.Z);
 
-        public static Vector3 Vector(this Vertex a)
-        {
-            return new Vector3(a.X, a.Y, a.Z);
-        }
+        public static Vertex Convert(this ObjParser.Types.Vertex a) => new Vertex((float) a.X, (float) a.Y, (float) a.Z);
 
-        public static Vector3 IntCast(this Vector3 a)
-        {
-            return new Vector3((int)a.X, (int)a.Y, (int)a.Z);
-        }
+        public static Vector3 Vector(this Vertex a) => new Vector3(a.X, a.Y, a.Z);
 
-        public static float Magnitude(this Vector3 a)
-        {
-            return MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
-        }
+        public static Vector3 IntCast(this Vector3 a) => new Vector3((int)a.X, (int)a.Y, (int)a.Z);
 
-        public static Vector3 Normalize(this Vector3 a)
-        {
-            return a / a.Magnitude();
-        }
+        public static float Magnitude(this Vector3 a) => MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
+
+        public static Vector3 Normalize(this Vector3 a) => a / a.Magnitude();
 
         public static Vector3 Forward(this Quaternion it)
         {

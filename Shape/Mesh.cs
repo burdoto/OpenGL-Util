@@ -1,21 +1,23 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using ObjParser;
 using SharpGL;
+using SharpGL.Enumerations;
 
 namespace OpenGL_Util.Shape
 {
     public class Mesh : IRenderObject, ILoadable
     {
+        private readonly ITransform _transform;
         private readonly FileInfo _file;
         private readonly Obj _mesh;
-        private readonly ITransform _transform;
 
-        public Mesh(ITransform transform, string file)
+        public Mesh(ITransform transform, FileInfo file)
         {
             _transform = transform;
-            _file = new FileInfo(file);
+            _file = file;
             _mesh = new Obj();
         }
 
@@ -37,7 +39,14 @@ namespace OpenGL_Util.Shape
 
         public void Draw(OpenGL gl, ITransform camera)
         {
-            throw new NotImplementedException();
+            var offset = Position.Vertex();
+            
+            gl.Begin(BeginMode.Triangles);
+            foreach (var vertex in _mesh.VertexList.Select(it => it.Convert())) 
+                gl.Vertex(vertex + offset);
+            gl.End();
         }
+
+        public void Dispose() => Unload();
     }
 }
