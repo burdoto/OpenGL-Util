@@ -15,6 +15,10 @@ namespace OpenGL_Util.Shape
         {
         }
 
+        public Singularity(Vector3 position, Vector3 scale) : this(position, Quaternion.Identity, scale)
+        {
+        }
+
         public Singularity(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             Position = position;

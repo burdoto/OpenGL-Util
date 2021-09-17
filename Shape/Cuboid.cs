@@ -22,35 +22,19 @@ namespace OpenGL_Util.Shape
             BACK = -0x4
         }
 
-        private Vertex _pos;
-        private Vertex _scale;
+        private readonly ITransform _transform;
 
-        public Cuboid(Vector3 position, Vector3 scale) : this(position, scale, Color.AliceBlue)
+        public Cuboid(ITransform transform, Color color)
         {
-        }
-
-        public Cuboid(Vector3 position, Vector3 scale, Color color)
-        {
-            Position = position;
+            _transform = transform;
             Color = color;
-            Scale = scale / 2;
         }
 
         public Color Color { get; }
 
-        public Vector3 Position
-        {
-            get => _pos.Vector();
-            set => _pos = value.Vertex();
-        }
-
-        public Vector3 Scale
-        {
-            get => _scale.Vector();
-            set => _scale = value.Vertex();
-        }
-
+        public Vector3 Position => _transform.Position;
         public Quaternion Rotation => Quaternion.Identity;
+        public Vector3 Scale => _transform.Scale;
 
         public IRenderObject RenderObject => this;
 
@@ -58,11 +42,10 @@ namespace OpenGL_Util.Shape
         {
             gl.Color(Color);
 
-            var position = _pos + camera.Position.Vertex();
-            //Debug.WriteLine("Drawing " + Color + " Cube at " + position);
-            var scale = _scale;
-            float[] pa = position + scale;
-            float[] pb = position - scale;
+            var position = Position + camera.Position;
+            var scale = Scale / 2;
+            float[] pa = Vector3.Transform(position + scale, Rotation).Vertex();
+            float[] pb = Vector3.Transform(position - scale, Rotation).Vertex();
             fixed (float* pap = pa)
             fixed (float* pbp = pb)
             {
