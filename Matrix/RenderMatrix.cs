@@ -13,16 +13,16 @@ namespace OpenGL_Util.Matrix
     public class RenderMatrix : IDrawable
     {
         private readonly
-            ConcurrentDictionary<float, ConcurrentDictionary<float, ConcurrentDictionary<float, IRenderObject?>>> _matrix =
-                new ConcurrentDictionary<float, ConcurrentDictionary<float, ConcurrentDictionary<float, IRenderObject?>>>();
+            ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>> _matrix =
+                new ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>>();
 
         public IRenderObject? this[Vector2 vec]
         {
-            get => this[vec.X, vec.Y];
-            set => this[vec.X, vec.Y] = value;
+            get => this[(int) vec.X, (int) vec.Y];
+            set => this[(int) vec.X, (int) vec.Y] = value;
         }
 
-        public IRenderObject? this[float x, float y]
+        public IRenderObject? this[int x, int y]
         {
             get => this[x, y, 0];
             set => this[x, y, 0] = value;
@@ -30,21 +30,21 @@ namespace OpenGL_Util.Matrix
 
         public IRenderObject? this[Vector3 vec]
         {
-            get => this[vec.X, vec.Y, vec.Z];
-            set => this[vec.X, vec.Y, vec.Z] = value;
+            get => this[(int) vec.X, (int) vec.Y, (int) vec.Z];
+            set => this[(int) vec.X, (int) vec.Y, (int) vec.Z] = value;
         }
 
-        public IRenderObject? this[float x, float y, float z]
+        public IRenderObject? this[int x, int y, int z]
         {
             get
             {
-                _matrix.GetOrAdd(x, key => new ConcurrentDictionary<float, ConcurrentDictionary<float, IRenderObject?>>())
-                    .GetOrAdd(y, key => new ConcurrentDictionary<float, IRenderObject?>())
+                _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>())
+                    .GetOrAdd(y, key => new ConcurrentDictionary<int, IRenderObject?>())
                     .TryGetValue(z, out IRenderObject? draw);
                 return draw;
             }
-            set => _matrix.GetOrAdd(x, key => new ConcurrentDictionary<float, ConcurrentDictionary<float, IRenderObject?>>())
-                .GetOrAdd(y, key => new ConcurrentDictionary<float, IRenderObject?>())
+            set => _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>())
+                .GetOrAdd(y, key => new ConcurrentDictionary<int, IRenderObject?>())
                 .TryAdd(z, value);
         }
 
