@@ -47,9 +47,9 @@ namespace OpenGL_Util
 
     public interface ITransform
     {
-        public Vector3 Position { get; }
-        public Quaternion Rotation { get; }
-        public Vector3 Scale { get; }
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; }
+        public Vector3 Scale { get; set; }
 
         public Vector3 Forward => Rotation.Forward();
         public Vector3 Up => Rotation.Up();

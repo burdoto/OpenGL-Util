@@ -32,9 +32,23 @@ namespace OpenGL_Util.Shape
 
         public Color Color { get; }
 
-        public Vector3 Position => _transform.Position;
-        public Quaternion Rotation => Quaternion.Identity;
-        public Vector3 Scale => _transform.Scale;
+        public Vector3 Position
+        {
+            get => _transform.Position;
+            set => _transform.Position = value;
+        }
+
+        public Quaternion Rotation
+        {
+            get => Quaternion.Identity;
+            set => throw new NotSupportedException();
+        }
+
+        public Vector3 Scale
+        {
+            get => _transform.Scale;
+            set => _transform.Scale = value;
+        }
 
         public IRenderObject RenderObject => this;
 
