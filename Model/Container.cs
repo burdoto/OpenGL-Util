@@ -78,13 +78,13 @@ namespace OpenGL_Util.Model
             return _children.Remove(container);
         }
 
-        protected abstract bool _Load();
-        protected abstract bool _Enable();
+        protected virtual bool _Load() => true;
+        protected virtual bool _Enable() => true;
 
-        protected abstract void _Tick();
+        protected virtual void _Tick() {}
 
-        protected abstract void _Disable();
+        protected virtual void _Disable() {}
 
-        protected abstract void _Unload();
+        protected virtual void _Unload() {}
     }
 }
