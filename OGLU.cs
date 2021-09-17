@@ -15,20 +15,24 @@ namespace OpenGL_Util
         bool RemoveChild(IContainer container);
     }
 
-    public interface ITickable : IContainer
+    public interface ILoadable
     {
         bool Loaded { get; }
+        bool Load();
+        void Unload();
+    }
+
+    public interface IEnableable
+    {
         bool Enabled { get; }
 
-        bool Load();
-
         bool Enable();
-
-        void Tick();
-
         void Disable();
+    }
 
-        void Unload();
+    public interface ITickable : IContainer, ILoadable, IEnableable
+    {
+        void Tick();
     }
 
     public interface IGameObject : ITransform
