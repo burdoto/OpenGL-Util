@@ -30,4 +30,8 @@
     <None Remove="ObjParser\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="ObjParser\ObjParser\ObjParser.csproj" />
+  </ItemGroup>
+
 </Project>
