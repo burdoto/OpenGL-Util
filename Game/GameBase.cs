@@ -15,7 +15,7 @@ namespace OpenGL_Util.Game
             RenderMatrix.Draw(gl, camera);
         }
 
-        public void Start()
+        public void Run()
         {
             if (!Load())
                 throw new Exception("Could not load game");
