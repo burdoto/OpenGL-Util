@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenGL_Util.Shape
 {
-    public struct Singularity : ITransform
+    public class Singularity : ITransform
     {
         public Singularity(Vector3 position) : this(position, Quaternion.Identity)
         {
@@ -22,8 +22,8 @@ namespace OpenGL_Util.Shape
             Scale = scale;
         }
 
-        public Vector3 Position { get; }
-        public Quaternion Rotation { get; }
-        public Vector3 Scale { get; }
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; }
+        public Vector3 Scale { get; set; }
     }
 }
