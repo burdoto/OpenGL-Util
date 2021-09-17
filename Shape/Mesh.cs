@@ -39,15 +39,30 @@ namespace OpenGL_Util.Shape
 
         public void Draw(OpenGL gl, ITransform camera)
         {
+            // todo Needs some work
             if (!Loaded)
                 return;
             
             var offset = Position.Vertex();
-            
-            gl.Begin(BeginMode.Triangles);
-            foreach (var vertex in _mesh.VertexList.Select(it => it.Convert())) 
-                gl.Vertex(vertex + offset);
-            gl.End();
+
+            for (int h = 0; h < _mesh.FaceList.Count; h++)
+            {
+                var face = _mesh.FaceList[h];
+                
+                if (face.VertexIndexList.Length != face.TextureVertexIndexList.Length)
+                    continue; // cannot draw face
+                
+                gl.Begin(BeginMode.Triangles);
+                for (int i = 0; i < face.VertexIndexList.Length; i++)
+                {
+                    var vtx = _mesh.VertexList[face.VertexIndexList[i] - 1].Convert() + offset;
+                    var tex = _mesh.TextureList[face.TextureVertexIndexList[i] - 1];
+                    
+                    gl.TexCoord(tex.X, tex.Y);
+                    gl.Vertex(vtx.X, vtx.Y, vtx.Z);
+                }
+                gl.End();
+            }
         }
 
         public void Dispose() => Unload();
