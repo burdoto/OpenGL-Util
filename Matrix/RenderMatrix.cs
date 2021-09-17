@@ -67,5 +67,16 @@ namespace OpenGL_Util.Matrix
             foreach (var obj in objs)
                 AddRenderObject<IRenderObject>(obj);
         }
+
+        public void Clear()
+        {
+            foreach (var xStage in _matrix.Values)
+            {
+                foreach (var yStage in xStage.Values) 
+                    yStage.Clear();
+                xStage.Clear();
+            }
+            _matrix.Clear();
+        }
     }
 }
