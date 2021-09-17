@@ -7,9 +7,23 @@ namespace OpenGL_Util.Game
 {
     public abstract class GameBase : Container, IDrawable
     {
+        protected GameBase() : this(new RenderMatrix())
+        {
+        }
+        
+        protected GameBase(GridMatrix gridMatrix) : this(new RenderMatrix(gridMatrix))
+        {
+        }
+
+        protected GameBase(RenderMatrix renderMatrix)
+        {
+            RenderMatrix = renderMatrix;
+        }
+
         public long TimeDelta { get; private set; }
         public bool Active { get; set; }
-        public RenderMatrix RenderMatrix { get; } = new RenderMatrix();
+        public RenderMatrix RenderMatrix { get; }
+        public GridMatrix Grid => RenderMatrix.Grid;
 
         public void Draw(OpenGL gl, ITransform camera)
         {

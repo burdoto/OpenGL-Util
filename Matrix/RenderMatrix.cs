@@ -12,54 +12,27 @@ namespace OpenGL_Util.Matrix
 {
     public class RenderMatrix : IDrawable
     {
-        private readonly
-            ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>> _matrix =
-                new ConcurrentDictionary<int, ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>>();
+        public readonly GridMatrix Grid;
 
-        public IRenderObject? this[Vector2 vec]
+        public RenderMatrix() : this(new MapMatrix3())
         {
-            get => this[(int) vec.X, (int) vec.Y];
-            set => this[(int) vec.X, (int) vec.Y] = value;
         }
 
-        public IRenderObject? this[int x, int y]
+        public RenderMatrix(GridMatrix grid)
         {
-            get => this[x, y, 0];
-            set => this[x, y, 0] = value;
-        }
-
-        public IRenderObject? this[Vector3 vec]
-        {
-            get => this[(int) vec.X, (int) vec.Y, (int) vec.Z];
-            set => this[(int) vec.X, (int) vec.Y, (int) vec.Z] = value;
-        }
-
-        public IRenderObject? this[int x, int y, int z]
-        {
-            get
-            {
-                _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>())
-                    .GetOrAdd(y, key => new ConcurrentDictionary<int, IRenderObject?>())
-                    .TryGetValue(z, out IRenderObject? draw);
-                return draw;
-            }
-            set => _matrix.GetOrAdd(x, key => new ConcurrentDictionary<int, ConcurrentDictionary<int, IRenderObject?>>())
-                .GetOrAdd(y, key => new ConcurrentDictionary<int, IRenderObject?>())
-                .TryAdd(z, value);
+            this.Grid = grid;
         }
 
         public void Draw(OpenGL gl, ITransform camera)
         {
             //Debug.WriteLine("Drawing Matrix");
-            foreach (var draw in _matrix.Values
-                .SelectMany(it => it.Values)
-                .SelectMany(it => it.Values))
+            foreach (var draw in Grid.GetVisibles(camera))
                 draw?.Draw(gl, camera);
         }
 
         public T AddRenderObject<T>(IRenderObject it) where T : IRenderObject
         {
-            return (T) (this[it.Position] = it);
+            return (T) (Grid[it.Position] = it);
         }
 
         public void AddRenderObjects(params IRenderObject[] objs)
@@ -68,15 +41,6 @@ namespace OpenGL_Util.Matrix
                 AddRenderObject<IRenderObject>(obj);
         }
 
-        public void Clear()
-        {
-            foreach (var xStage in _matrix.Values)
-            {
-                foreach (var yStage in xStage.Values) 
-                    yStage.Clear();
-                xStage.Clear();
-            }
-            _matrix.Clear();
-        }
+        public void Clear() => Grid.Clear();
     }
 }
