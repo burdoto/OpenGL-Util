@@ -131,10 +131,5 @@ namespace OpenGL_Util
 
             return pitchYawRoll;
         }
-
-        public static Quaternion Rotation(this Vector3 a, float angle)
-        {
-            return new Quaternion(a.Normalize(), angle);
-        }
     }
 }
