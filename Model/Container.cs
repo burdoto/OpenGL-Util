@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace OpenGL_Util.Model
 {
@@ -13,6 +14,7 @@ namespace OpenGL_Util.Model
 
         public bool Load()
         {
+            Debug.WriteLine("Loading " + this);
             foreach (var container in _children)
                 if (container is ILoadable loadable)
                     loadable.Load();
@@ -21,6 +23,7 @@ namespace OpenGL_Util.Model
 
         public bool Enable()
         {
+            Debug.WriteLine("Enabling " + this);
             foreach (var container in _children)
                 if (container is IEnableable enableable)
                     enableable.Enable();
@@ -41,6 +44,7 @@ namespace OpenGL_Util.Model
         {
             if (!Enabled)
                 return;
+            Debug.WriteLine("Disabling " + this);
             foreach (var container in _children)
                 if (container is IEnableable enableable)
                     enableable.Disable();
@@ -52,6 +56,7 @@ namespace OpenGL_Util.Model
         {
             if (!Loaded)
                 return;
+            Debug.WriteLine("Unloading " + this);
             foreach (var container in _children)
                 if (container is ILoadable loadable)
                     loadable.Unload();
