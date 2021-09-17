@@ -11,6 +11,36 @@ using SharpGL.SceneGraph;
 
 namespace OpenGL_Util
 {
+    public interface IContainer : IDisposable
+    {
+        IEnumerable<IContainer> Children { get; }
+        
+        bool AddChild(IContainer container);
+
+        bool RemoveChild(IContainer container);
+    }
+    
+    public interface ITickable : IContainer
+    {
+        bool Loaded { get; }
+        bool Enabled { get; }
+        
+        bool Load();
+
+        bool Enable();
+
+        void Tick();
+        
+        void Disable();
+
+        void Unload();
+    }
+    
+    public interface IGameObject
+    {
+        IRenderObject RenderObject { get; }
+    }
+    
     public interface IRenderObject : ITransform, IDrawable
     {
     }
