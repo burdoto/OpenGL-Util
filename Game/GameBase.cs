@@ -15,6 +15,9 @@ namespace OpenGL_Util.Game
         {
             RenderMatrix.Draw(gl, camera);
             gl.DrawText(5, 20, 255, 0, 0, "Courier New", 12, $"Tick: {TimeDelta}ms");
+
+            var euler = camera.Rotation.EulerAngles();
+            gl.Rotate(euler.X, euler.Y, euler.Z);
         }
 
         public void Run()
