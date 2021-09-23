@@ -38,6 +38,7 @@ namespace OpenGL_Util
     public interface IGameObject : ITransform
     {
         IRenderObject RenderObject { get; }
+        short Metadata { get; set; }
     }
 
     public interface IRenderObject : ITransform, IDrawable
@@ -69,6 +70,47 @@ namespace OpenGL_Util
         public static Vector3 Vector(this Vertex a) => new Vector3(a.X, a.Y, a.Z);
 
         public static Vector3 IntCast(this Vector3 a) => new Vector3((int)a.X, (int)a.Y, (int)a.Z);
+        
+        public static Vector3 ShortCast(this Vector3 a) => new Vector3((short)a.X, (short)a.Y, (short)a.Z);
+
+        public static long CombineIntoLong(this Vector3 a, short metadata)
+        {
+            if (a.X > short.MaxValue || a.X < short.MinValue
+                                     || a.Y > short.MaxValue || a.Y < short.MinValue
+                                     || a.Z > short.MaxValue || a.Z < short.MinValue)
+                throw new ArgumentException(
+                    $"Vector values are out of bounds! Vector: {a}; Bounds: {short.MinValue} & {short.MaxValue}");
+            a = a.ShortCast();
+            long v = 0;
+            const byte off = 16;
+
+            v |= ((short)a.X << off * 0);
+            v |= ((short)a.Y << off * 1);
+            v |= ((short)a.Z << off * 2);
+            v |= (metadata << off * 3);
+
+            return v;
+        }
+
+        public static Vector4 Decompose(this long value)
+        {
+            const byte off = 16;
+
+            short x = (short)(value >> off * 0);
+            short y = (short)(value >> off * 1);
+            short z = (short)(value >> off * 2);
+            short meta = (short)(value >> off * 3);
+
+            return new Vector4(x, y, z, meta);
+        }
+
+        public static Vector3 ToVec3(this Vector4 vec) => vec.ToVec3(out float nil);
+        
+        public static Vector3 ToVec3(this Vector4 vec, out float metadata)
+        {
+            metadata = vec.W;
+            return new Vector3(vec.X, vec.Y, vec.Z);
+        }
 
         public static float Magnitude(this Vector3 a) => MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
 

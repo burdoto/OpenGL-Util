@@ -32,6 +32,27 @@ namespace OpenGL_Util.Matrix
         public abstract void Clear();
     }
 
+    public class ShortLongMatrix : GridMatrix
+    {
+        private readonly IDictionary<long, IGameObject?> _objs = new ConcurrentDictionary<long, IGameObject?>();
+
+        public override IGameObject? this[Vector3 vec]
+        {
+            get => _objs[vec.CombineIntoLong(0)];
+            set => _objs[vec.CombineIntoLong(value?.Metadata ?? 0)] = value!;
+        }
+
+        public override IEnumerable<IRenderObject?> GetVisibles(ITransform? camera)
+        {
+            return _objs.Values.Select(it => it?.RenderObject).Where(it => it != null);
+        }
+
+        public override void Clear()
+        {
+            _objs.Clear();
+        }
+    }
+
     public class ListMatrix : GridMatrix
     {
         private readonly List<IGameObject> _objs = new List<IGameObject>();
