@@ -21,8 +21,8 @@ namespace OpenGL_Util.Matrix
 
         public IGameObject? this[int x, int y, int z]
         {
-            get => this[x, y, z];
-            set => this[x, y, z] = value;
+            get => this[new Vector3(x, y, z)];
+            set => this[new Vector3(x, y, z)] = value;
         }
 
         public abstract IGameObject? this[Vector3 vec] { get; set; }
