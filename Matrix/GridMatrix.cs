@@ -60,7 +60,13 @@ namespace OpenGL_Util.Matrix
         public override IGameObject? this[Vector3 vec]
         {
             get => _objs.First(it => it.Position == vec);
-            set => _objs[_objs.FindIndex(it => it.Position == vec)] = value!;
+            set
+            {
+                var index = _objs.FindIndex(it => it.Position == vec);
+                if (index != -1)
+                    _objs[index] = value!;
+                else _objs.Add(value!);
+            }
         }
 
         public override IEnumerable<IRenderObject?> GetVisibles(ITransform? camera)
