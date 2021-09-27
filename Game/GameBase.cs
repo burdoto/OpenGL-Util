@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using OpenGL_Util.Matrix;
 using OpenGL_Util.Model;
 using SharpGL;
@@ -27,11 +28,14 @@ namespace OpenGL_Util.Game
 
         public void Draw(OpenGL gl, ITransform camera)
         {
+            var cam = camera.Position;
+            var look = cam + Vector3.Transform(Vector3.UnitZ, camera.Rotation);
+            gl.LookAt(cam.X, cam.Y, cam.Z, 
+                look.X,look.Y,look.Z, 
+                0, 1, 0);
+            
             RenderMatrix.Draw(gl, camera);
             gl.DrawText(5, 20, 255, 0, 0, "Courier New", 12, $"Tick: {TimeDelta}ms");
-
-            var euler = camera.Rotation.EulerAngles();
-            gl.Rotate(euler.X, euler.Y, euler.Z);
         }
 
         public void Run()

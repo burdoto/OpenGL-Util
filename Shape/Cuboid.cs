@@ -42,7 +42,7 @@ namespace OpenGL_Util.Shape
         {
             gl.Color(Color);
 
-            var position = Position + camera.Position;
+            var position = Position;
             var scale = Scale / 2;
             float[] pa = Vector3.Transform(position + scale, Rotation).Vertex();
             float[] pb = Vector3.Transform(position - scale, Rotation).Vertex();
