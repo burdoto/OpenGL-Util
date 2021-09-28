@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using OpenGL_Util.Matrix;
 using OpenGL_Util.Model;
@@ -36,6 +37,14 @@ namespace OpenGL_Util.Game
                 0, 1, 0);
             
             RenderMatrix.Draw(gl, camera);
+            foreach (var render in Children.Select(it => {
+                if (it is IDrawable draw) 
+                    return draw;
+                if (it is IGameObject gbo)
+                    return gbo.RenderObject;
+                return null;
+            }).Where(it => it != null))
+                render.Draw(gl, camera);
             gl.DrawText(5, 20, 255, 0, 0, "Courier New", 12, $"Tick: {TimeDelta}ms");
         }
 
