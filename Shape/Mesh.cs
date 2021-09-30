@@ -52,7 +52,7 @@ namespace OpenGL_Util.Shape
                 if (face.VertexIndexList.Length != face.TextureVertexIndexList.Length)
                     continue; // cannot draw face
                 
-                gl.Begin(BeginMode.Triangles);
+                gl.Begin(BeginMode.Quads);
                 for (int i = 0; i < face.VertexIndexList.Length; i++)
                 {
                     var vtx = _mesh.VertexList[face.VertexIndexList[i] - 1].Convert() + offset;
