@@ -22,21 +22,20 @@ namespace OpenGL_Util.Shape3
             BACK = -0x4
         }
 
-        private readonly ITransform _transform;
-
-        public Cuboid(ITransform transform, Color color)
+        public Cuboid(IGameObject gameObject, Color color)
         {
-            _transform = transform;
+            GameObject = gameObject;
             Color = color;
         }
 
         public Color Color { get; }
 
-        public Vector3 Position => _transform.Position;
+        public IGameObject GameObject { get; }
+        public Vector3 Position => GameObject.Position;
 
-        public Quaternion Rotation => _transform.Rotation;
+        public Quaternion Rotation => GameObject.Rotation;
 
-        public Vector3 Scale => _transform.Scale;
+        public Vector3 Scale => GameObject.Scale;
 
         public unsafe void Draw(OpenGL gl, ITransform camera)
         {

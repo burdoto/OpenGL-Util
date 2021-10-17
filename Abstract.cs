@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Numerics;
+using OpenGL_Util.Physics;
 using SharpGL;
 
 namespace OpenGL_Util
 {
     public abstract class AbstractGameObject : IGameObject, IDisposable
     {
-        public readonly ITransform Transform;
+        public ITransform Transform { get; }
 
         protected AbstractGameObject(ITransform transform, short metadata = 0)
         {
@@ -25,7 +26,7 @@ namespace OpenGL_Util
 
     public abstract class AbstractRenderObject : IRenderObject
     {
-        public readonly IGameObject GameObject;
+        public IGameObject GameObject { get; }
 
         protected AbstractRenderObject(IGameObject gameObject)
         {

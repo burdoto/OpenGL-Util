@@ -37,12 +37,20 @@ namespace OpenGL_Util
 
     public interface IGameObject : ITransform
     {
+        ITransform Transform { get; }
+        Vector3 ITransform.Position => Transform.Position;
+        Quaternion ITransform.Rotation => Transform.Rotation;
+        Vector3 ITransform.Scale => Transform.Scale;
         IRenderObject RenderObject { get; }
         short Metadata { get; set; }
     }
 
     public interface IRenderObject : ITransform, IDrawable
     {
+        IGameObject GameObject { get; }
+        Vector3 ITransform.Position => GameObject.Position;
+        Quaternion ITransform.Rotation => GameObject.Rotation;
+        Vector3 ITransform.Scale => GameObject.Scale;
     }
 
     public interface IDrawable
@@ -66,6 +74,8 @@ namespace OpenGL_Util
         public static Vertex Vertex(this Vector3 a) => new Vertex(a.X, a.Y, a.Z);
 
         public static Vertex Convert(this ObjParser.Types.Vertex a) => new Vertex((float) a.X, (float) a.Y, (float) a.Z);
+
+        public static Vector2 Vector2(this Vector3 a) => new Vector2(a.X, a.Y);
 
         public static Vector3 Vector(this Vertex a) => new Vector3(a.X, a.Y, a.Z);
 
