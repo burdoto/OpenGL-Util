@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using ObjParser;
 using SharpGL;
 using SharpGL.Enumerations;
 
-namespace OpenGL_Util.Shape
+namespace OpenGL_Util.Shape3
 {
     public class Mesh : IRenderObject, ILoadable
     {
@@ -66,5 +65,6 @@ namespace OpenGL_Util.Shape
         }
 
         public void Dispose() => Unload();
+        public byte[] ColorArray => throw new NotSupportedException();
     }
 }

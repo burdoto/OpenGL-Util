@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using OpenGL_Util.Matrix;
 using OpenGL_Util.Model;
 using SharpGL;
@@ -22,6 +23,7 @@ namespace OpenGL_Util.Game
             RenderMatrix = renderMatrix;
         }
 
+        public int BaseTickTime { get; protected set; } = -1;
         public long TimeDelta { get; private set; }
         public bool Active { get; set; }
         public RenderMatrix RenderMatrix { get; }
@@ -40,11 +42,11 @@ namespace OpenGL_Util.Game
             foreach (var render in Children.Select(it => {
                 if (it is IDrawable draw) 
                     return draw;
-                if (it is IGameObject gbo)
-                    return gbo.RenderObject;
+                if (it is IGameObject go)
+                    return go.RenderObject;
                 return null;
             }).Where(it => it != null))
-                render.Draw(gl, camera);
+                render?.Draw(gl, camera);
             gl.DrawText(5, 20, 255, 0, 0, "Courier New", 12, $"Tick: {TimeDelta}ms");
         }
 
@@ -61,6 +63,11 @@ namespace OpenGL_Util.Game
                 start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 Tick();
                 TimeDelta = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
+                if (BaseTickTime != -1 && TimeDelta < BaseTickTime)
+                {
+                    Thread.Sleep((int)(BaseTickTime - TimeDelta - 80));
+                    TimeDelta = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
+                }
             }
 
             Disable();

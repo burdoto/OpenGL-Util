@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
+﻿using System.Numerics;
 
-namespace OpenGL_Util.Shape
+namespace OpenGL_Util.Model
 {
     public class Singularity : ITransform
     {

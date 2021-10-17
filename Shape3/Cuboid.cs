@@ -5,7 +5,7 @@ using SharpGL;
 using SharpGL.Enumerations;
 using SharpGL.SceneGraph;
 
-namespace OpenGL_Util.Shape
+namespace OpenGL_Util.Shape3
 {
     public class Cuboid : IRenderObject
     {
@@ -141,5 +141,7 @@ namespace OpenGL_Util.Shape
         {
             return true;
         }
+
+        public byte[] ColorArray { get; }
     }
 }
