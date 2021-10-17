@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
 using OpenGL_Util.Model;
 using SharpGL;
@@ -123,6 +124,7 @@ namespace OpenGL_Util
             return new Vector3(vec.X, vec.Y, vec.Z);
         }
 
+        public static float Magnitude(this Vector2 a) => MathF.Sqrt(a.X * a.X + a.Y * a.Y);
         public static float Magnitude(this Vector3 a) => MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
 
         public static Vector3 Normalize(this Vector3 a) => a / a.Magnitude();
