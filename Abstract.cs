@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Numerics;
+using OpenGL_Util.Model;
 using OpenGL_Util.Physics;
 using SharpGL;
 
 namespace OpenGL_Util
 {
-    public abstract class AbstractGameObject : IGameObject, IDisposable
+    public abstract class AbstractGameObject : Container, IGameObject
     {
-        public ITransform Transform { get; }
+        public Singularity Transform { get; }
 
-        protected AbstractGameObject(ITransform transform, short metadata = 0)
+        protected AbstractGameObject(Singularity transform, short metadata = 0)
         {
             Transform = transform;
             Metadata = metadata;

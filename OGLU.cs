@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using OpenGL_Util.Model;
 using SharpGL;
 using SharpGL.SceneGraph;
 
@@ -37,7 +38,7 @@ namespace OpenGL_Util
 
     public interface IGameObject : ITransform
     {
-        ITransform Transform { get; }
+        Singularity Transform { get; }
         Vector3 ITransform.Position => Transform.Position;
         Quaternion ITransform.Rotation => Transform.Rotation;
         Vector3 ITransform.Scale => Transform.Scale;
