@@ -9,13 +9,13 @@ namespace OpenGL_Util.Shape3
 {
     public class Mesh : IRenderObject, ILoadable
     {
-        private readonly ITransform _transform;
+        public IGameObject GameObject { get; }
         private readonly FileInfo _file;
         private readonly Obj _mesh;
 
-        public Mesh(ITransform transform, FileInfo file)
+        public Mesh(IGameObject gameObject, FileInfo file)
         {
-            _transform = transform;
+            GameObject = gameObject;
             _file = file;
             _mesh = new Obj();
         }
@@ -32,9 +32,9 @@ namespace OpenGL_Util.Shape3
         
         public bool Loaded { get; private set; }
         
-        public Vector3 Position => _transform.Position;
-        public Quaternion Rotation => _transform.Rotation;
-        public Vector3 Scale => _transform.Scale;
+        public Vector3 Position => GameObject.Position;
+        public Quaternion Rotation => GameObject.Rotation;
+        public Vector3 Scale => GameObject.Scale;
 
         public void Draw(OpenGL gl, ITransform camera)
         {

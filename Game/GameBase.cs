@@ -28,7 +28,7 @@ namespace OpenGL_Util.Game
         public bool Active { get; set; }
         public RenderMatrix RenderMatrix { get; }
         public GridMatrix Grid => RenderMatrix.Grid;
-        public abstract ITransform Player { get; }
+        public abstract ITransform Camera { get; }
 
         public void Draw(OpenGL gl, ITransform camera)
         {
