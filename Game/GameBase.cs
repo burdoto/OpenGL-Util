@@ -33,7 +33,7 @@ namespace OpenGL_Util.Game
         public void Draw(OpenGL gl, ITransform camera)
         {
             var cam = camera.Position;
-            var look = cam + Vector3.Transform(Vector3.UnitZ, camera.Rotation);
+            var look = cam + Vector3.Transform(-Vector3.UnitZ, camera.Rotation);
             gl.LookAt(cam.X, cam.Y, cam.Z, 
                 look.X,look.Y,look.Z, 
                 0, 1, 0);

@@ -4,6 +4,10 @@ namespace OpenGL_Util.Model
 {
     public class Singularity : ITransform
     {
+        public Singularity() : this(Vector3.Zero)
+        {
+        }
+
         public Singularity(Vector3 position) : this(position, Quaternion.Identity)
         {
         }
