@@ -28,14 +28,15 @@ namespace OpenGL_Util.Shape2
             //fixme
             gl.Begin(Filled ? BeginMode.TriangleFan : BeginMode.LineLoop);
             gl.Color(Color);
-            var pos = Position.Vertex();
+            var vec = Position.Vertex();
             var scale = Scale.Vertex();
-            var vec = pos;
-            vec += scale;
-            gl.Vertex(vec);
-            vec -= scale;
+            vec.X -= scale.X / 2;
             gl.Vertex(vec);
             vec.X += scale.X;
+            gl.Vertex(vec);
+            vec.Y += scale.Y;
+            gl.Vertex(vec);
+            vec.X -= scale.X;
             gl.Vertex(vec);
             gl.End();
         }
