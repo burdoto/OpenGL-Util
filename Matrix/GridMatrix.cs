@@ -48,7 +48,7 @@ namespace OpenGL_Util.Matrix
 
         public override IEnumerable<IRenderObject?> GetVisibles(ITransform? camera)
         {
-            return _objs.Values.Select(it => it?.RenderObject).Where(it => it != null);
+            return _objs.Values.SelectMany(it => it?.RenderObjects).Where(it => it != null);
         }
 
         public override void Clear()
@@ -79,7 +79,7 @@ namespace OpenGL_Util.Matrix
 
         public override IEnumerable<IRenderObject?> GetVisibles(ITransform? camera)
         {
-            return _objs.Select(it => it.RenderObject);
+            return _objs.SelectMany(it => it.RenderObjects);
         }
 
         public override void Clear()
@@ -119,7 +119,7 @@ namespace OpenGL_Util.Matrix
             return _matrix.Values
                 .SelectMany(x => x.Values)
                 .SelectMany(y => y.Values)
-                .Select(it => it?.RenderObject);
+                .SelectMany(it => it?.RenderObjects);
         }
 
         public override void Clear()

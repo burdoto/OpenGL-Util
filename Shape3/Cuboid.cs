@@ -7,7 +7,7 @@ using SharpGL.SceneGraph;
 
 namespace OpenGL_Util.Shape3
 {
-    public class Cuboid : IRenderObject
+    public class Cuboid : AbstractRenderObject
     {
         [Flags]
         public enum Side
@@ -26,24 +26,14 @@ namespace OpenGL_Util.Shape3
         {
         }
 
-        public Cuboid(IGameObject gameObject, ITransform transform, Color color)
+        public Cuboid(IGameObject gameObject, ITransform transform, Color color) : base(gameObject, transform)
         {
-            GameObject = gameObject;
-            Transform = transform;
             Color = color;
         }
 
         public Color Color { get; }
 
-        public IGameObject GameObject { get; }
-        public ITransform Transform { get; }
-        public Vector3 Position => GameObject.Position;
-
-        public Quaternion Rotation => GameObject.Rotation;
-
-        public Vector3 Scale => GameObject.Scale;
-
-        public unsafe void Draw(OpenGL gl, ITransform camera)
+        public override void Draw(OpenGL gl, ITransform camera)
         {
             gl.Color(Color);
 
@@ -51,6 +41,11 @@ namespace OpenGL_Util.Shape3
             var scale = Scale / 2;
             float[] pa = Vector3.Transform(position + scale, Rotation).Vertex();
             float[] pb = Vector3.Transform(position - scale, Rotation).Vertex();
+            DrawUnsafe(gl, pa, pb);
+        }
+
+        private unsafe void DrawUnsafe(OpenGL gl, float[] pa, float[] pb)
+        {
             fixed (float* pap = pa)
             fixed (float* pbp = pb)
             {

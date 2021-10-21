@@ -21,7 +21,7 @@ namespace OpenGL_Util
         public virtual Vector3 Position => Transform.Position;
         public virtual Quaternion Rotation => Transform.Rotation;
         public virtual Vector3 Scale => Transform.Scale;
-        public IRenderObject RenderObject { get; protected set; }
+        public List<IRenderObject> RenderObjects { get; } = new List<IRenderObject>();
         public IPhysicsObject? PhysicsObject { get; protected set; }
         public ICollider? Collider  { get; protected set; }
         public override IEnumerable<IDisposable> Children => new IDisposable?[]{Collider, PhysicsObject}
@@ -36,10 +36,16 @@ namespace OpenGL_Util
     public abstract class AbstractRenderObject : IRenderObject
     {
         public IGameObject GameObject { get; }
+        public ITransform Transform { get; }
 
-        protected AbstractRenderObject(IGameObject gameObject)
+        protected AbstractRenderObject(IGameObject gameObject) : this(gameObject, gameObject.Transform)
+        {
+        }
+
+        protected AbstractRenderObject(IGameObject gameObject, ITransform transform)
         {
             GameObject = gameObject;
+            Transform = transform;
         }
 
         public virtual Vector3 Position => GameObject.Position;

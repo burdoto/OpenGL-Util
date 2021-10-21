@@ -39,6 +39,22 @@ namespace OpenGL_Util.Physics
                         Colliding.Add(go.Collider);
         }
     }
+    
+    public class InverseCollider : AbstractCollider
+    {
+        public ICollider Collider { get; } 
+        
+        public InverseCollider(ICollider collider) : base(collider.Transform, collider.ColliderType)
+        {
+            Collider = collider;
+        }
+
+        public override bool CollidesWith(ICollider other) => !Collider.CollidesWith(other);
+
+        public override bool PointInside(Vector2 point) => !Collider.PointInside(point);
+
+        public override bool PointInside(Vector3 point) => !Collider.PointInside(point);
+    }
 
     public class MultiCollider : AbstractCollider
     {
@@ -86,7 +102,7 @@ namespace OpenGL_Util.Physics
             // check for collisions
             if (Collider.Colliding.Count > 0)
             { // todo: transport forces to the colliding objects
-                Debug.WriteLine("Collided with " + Collider.Colliding);
+                Debug.WriteLine("Collided with " + Collider.ColliderType);
             }
 
             // apply to gameobject

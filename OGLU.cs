@@ -46,7 +46,7 @@ namespace OpenGL_Util
         Vector3 ITransform.Position => Transform.Position;
         Quaternion ITransform.Rotation => Transform.Rotation;
         Vector3 ITransform.Scale => Transform.Scale;
-        IRenderObject RenderObject { get; }
+        List<IRenderObject> RenderObjects { get; }
         IPhysicsObject? PhysicsObject { get; }
         ICollider? Collider { get; }
         short Metadata { get; set; }
@@ -55,7 +55,7 @@ namespace OpenGL_Util
     public interface IRenderObject : ITransform, IDrawable
     {
         IGameObject GameObject { get; }
-        ITransform Transform => GameObject.Transform;
+        ITransform Transform { get; }
         Vector3 ITransform.Position => Transform.Position;
         Quaternion ITransform.Rotation => Transform.Rotation;
         Vector3 ITransform.Scale => Transform.Scale;
