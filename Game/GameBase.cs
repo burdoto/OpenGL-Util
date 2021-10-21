@@ -66,11 +66,6 @@ namespace OpenGL_Util.Game
                 start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 Tick();
                 TimeDelta = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
-                if (BaseTickTime != -1 && TimeDelta < BaseTickTime)
-                {
-                    Thread.Sleep((int)(BaseTickTime - TimeDelta - 80));
-                    TimeDelta = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
-                }
             }
 
             Disable();

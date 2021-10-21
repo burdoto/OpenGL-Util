@@ -24,7 +24,10 @@ namespace OpenGL_Util
         public IRenderObject RenderObject { get; protected set; }
         public IPhysicsObject? PhysicsObject { get; protected set; }
         public ICollider? Collider  { get; protected set; }
-        public override IEnumerable<IDisposable> Children => PhysicsObject == null ? _children : _children.Append(PhysicsObject);
+        public override IEnumerable<IDisposable> Children => new IDisposable?[]{Collider, PhysicsObject}
+            .Where(x => x!=null)
+            .Select(x => x!)
+            .Concat(_children);
         public short Metadata { get; set; }
         
         public virtual void Dispose() { }

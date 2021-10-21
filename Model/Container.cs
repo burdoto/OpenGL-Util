@@ -16,7 +16,7 @@ namespace OpenGL_Util.Model
         public virtual bool Load()
         {
             Debug.WriteLine("Loading " + this);
-            foreach (var container in _children)
+            foreach (var container in Children)
                 if (container is ILoadable loadable)
                     loadable.Load();
             return !Loaded && (_loaded = _Load());
@@ -25,7 +25,7 @@ namespace OpenGL_Util.Model
         public virtual bool Enable()
         {
             Debug.WriteLine("Enabling " + this);
-            foreach (var container in _children)
+            foreach (var container in Children)
                 if (container is IEnableable enableable)
                     enableable.Enable();
             return Loaded && (_enabled = _Enable());
@@ -36,7 +36,7 @@ namespace OpenGL_Util.Model
             if (!Enabled)
                 return;
             _Tick();
-            foreach (var container in _children)
+            foreach (var container in Children)
                 if (container is ITickable tickable)
                     tickable.Tick();
         }
@@ -46,7 +46,7 @@ namespace OpenGL_Util.Model
             if (!Enabled)
                 return;
             Debug.WriteLine("Disabling " + this);
-            foreach (var container in _children)
+            foreach (var container in Children)
                 if (container is IEnableable enableable)
                     enableable.Disable();
             _Disable();
@@ -58,7 +58,7 @@ namespace OpenGL_Util.Model
             if (!Loaded)
                 return;
             Debug.WriteLine("Unloading " + this);
-            foreach (var container in _children)
+            foreach (var container in Children)
                 if (container is ILoadable loadable)
                     loadable.Unload();
             _Unload();

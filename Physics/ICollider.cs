@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace OpenGL_Util.Physics
 {
@@ -14,7 +16,7 @@ namespace OpenGL_Util.Physics
         // todo: d3_Mesh
     }
     
-    public interface ICollider : ITransform
+    public interface ICollider : ITransform, ITickable
     {
         IGameObject GameObject { get; }
 
@@ -26,5 +28,6 @@ namespace OpenGL_Util.Physics
         bool PointInside(Vector2 point);
         bool PointInside(Vector3 point);
         ColliderType ColliderType { get; }
+        IList<ICollider> Colliding { get; }
     }
 }

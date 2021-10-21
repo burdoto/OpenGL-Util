@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -30,6 +31,8 @@ namespace OpenGL_Util.Matrix
         public abstract IEnumerable<IRenderObject?> GetVisibles(ITransform? camera);
 
         public abstract void Clear();
+
+        public abstract IEnumerable<IGameObject> GetGameObjects();
     }
 
     public class ShortLongMatrix : GridMatrix
@@ -51,6 +54,10 @@ namespace OpenGL_Util.Matrix
         {
             _objs.Clear();
         }
+
+        public override IEnumerable<IGameObject> GetGameObjects() => _objs.Values
+            .Where(it => it != null)
+            .Select(it => it!);
     }
 
     public class ListMatrix : GridMatrix
@@ -78,6 +85,10 @@ namespace OpenGL_Util.Matrix
         {
             _objs.Clear();
         }
+
+        public override IEnumerable<IGameObject> GetGameObjects() => _objs
+            .Where(it => it != null)
+            .Select(it => it!);
     }
 
     public class MapMatrix : GridMatrix
@@ -121,5 +132,11 @@ namespace OpenGL_Util.Matrix
 
             _matrix.Clear();
         }
+
+        public override IEnumerable<IGameObject> GetGameObjects() => _matrix.Values
+            .SelectMany(x => x.Values)
+            .SelectMany(y => y.Values)
+            .Where(it => it != null)
+            .Select(it => it!);
     }
 }
