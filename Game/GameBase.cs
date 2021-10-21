@@ -12,7 +12,7 @@ namespace OpenGL_Util.Game
     {
         public static GameBase? Main { get; private set; }
         
-        protected GameBase() : this(new RenderMatrix(new ShortLongMatrix()))
+        protected GameBase() : this(new RenderMatrix(new ListMatrix()))
         {
         }
         
