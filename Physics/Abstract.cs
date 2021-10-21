@@ -75,7 +75,6 @@ namespace OpenGL_Util.Physics
             }
 
             // apply to gameobject
-            float scale = GameBase.TimeDelta / 1000f;
             GameObject.Transform.Position += Velocity * scale;
             GameObject.Transform.Rotation *= RotationVelocity * scale;
         }
