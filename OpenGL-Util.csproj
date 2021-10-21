@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>OpenGL_Util</RootNamespace>
     <ApplicationIcon />
     <StartupObject />
     <Nullable>enable</Nullable>
+    <TargetFrameworks>net46;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
