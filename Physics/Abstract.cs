@@ -31,13 +31,11 @@ namespace OpenGL_Util.Physics
         protected override void _Tick()
         {
             Colliding.Clear();
-            foreach (var collider in GameBase.Main?.Grid.GetGameObjects()
-                                         .Where(it => it != GameObject)
-                                         .Where(it => it.Collider != null)
-                                         .Select(it => it.Collider!)
-                                     ?? (IEnumerable<ICollider>)Array.Empty<IGameObject>())
-                if (CollidesWith(collider)) // todo Update this
-                    Colliding.Add(collider);
+
+            foreach (var go in GameBase.Main?.Grid.GetGameObjects() ?? Array.Empty<IGameObject>())
+                if (go.Collider != null)
+                    if (CollidesWith(go.Collider))
+                        Colliding.Add(go.Collider);
         }
     }
     
