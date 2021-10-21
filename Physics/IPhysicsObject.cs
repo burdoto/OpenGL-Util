@@ -23,6 +23,6 @@ namespace OpenGL_Util.Physics
         public Vector3 Velocity { get; } // in units per second
         public Quaternion RotationVelocity { get; } // in units per second 
 
-        public void ApplyForce(Vector3 force);
+        public void ApplyAcceleration(Vector3 force);
     }
 }

@@ -12,7 +12,7 @@ namespace OpenGL_Util.Game
     {
         public static GameBase? Main { get; private set; }
         
-        protected GameBase() : this(new RenderMatrix())
+        protected GameBase() : this(new RenderMatrix(new ShortLongMatrix()))
         {
         }
         
@@ -42,7 +42,14 @@ namespace OpenGL_Util.Game
                 0, 1, 0);
             
             RenderMatrix.Draw(gl, camera);
-            foreach (var render in Children.Select(it => {
+            foreach (var render in Children
+                .SelectMany(it =>
+                {
+                    if (it is Container c)
+                        return c.Children.Append(it);
+                    return new [] { it };
+                })
+                .Select(it => {
                 if (it is IDrawable draw) 
                     return draw;
                 if (it is IGameObject go)
@@ -51,6 +58,13 @@ namespace OpenGL_Util.Game
             }).Where(it => it != null))
                 render?.Draw(gl, camera);
             gl.DrawText(5, 20, 255, 0, 0, "Courier New", 12, $"Tick: {TimeDelta}ms");
+        }
+
+        public override bool AddChild(IDisposable container)
+        {
+            if (container is IGameObject go)
+                Grid[go.Position] = go;
+            return base.AddChild(container);
         }
 
         public void Run()

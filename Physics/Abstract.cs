@@ -55,13 +55,13 @@ namespace OpenGL_Util.Physics
         public Vector3 Velocity { get; set; } = Vector3.Zero;
         public Quaternion RotationVelocity { get; set; } = Quaternion.Identity;
         
-        public void ApplyForce(Vector3 force) => Velocity += force * force;
+        public void ApplyAcceleration(Vector3 force) => Velocity += force * force;
 
         public override void Tick()
         {
             // apply gravity to velocity
             if (Gravity != Vector3.Zero)
-                ApplyForce(Gravity);
+                ApplyAcceleration(Gravity);
 
             base.Tick();
             
