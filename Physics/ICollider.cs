@@ -31,6 +31,6 @@ namespace OpenGL_Util.Physics
         bool PointInside(Vector2 point);
         bool PointInside(Vector3 point);
         ColliderType ColliderType { get; }
-        IList<ICollider> Colliding { get; }
+        ISet<IGameObject> Colliding { get; }
     }
 }

@@ -25,7 +25,11 @@ namespace OpenGL_Util.Shape2
             gl.End();
         }
 
-        public Circle(IGameObject gameObject) : base(gameObject)
+        public Circle(IGameObject gameObject) : this(gameObject, gameObject.Transform)
+        {
+        }
+
+        public Circle(IGameObject gameObject, ITransform transform) : base(gameObject, transform)
         {
         }
     }

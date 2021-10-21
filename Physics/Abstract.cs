@@ -23,7 +23,7 @@ namespace OpenGL_Util.Physics
         public Quaternion Rotation => Transform.Rotation;
         public Vector3 Scale => Transform.Scale;
         public ColliderType ColliderType => _type;
-        public IList<ICollider> Colliding { get; } = new List<ICollider>();
+        public ISet<IGameObject> Colliding { get; } = new HashSet<IGameObject>();
 
         public abstract bool CollidesWith(ICollider other);
         public abstract bool PointInside(Vector2 point);
@@ -36,7 +36,7 @@ namespace OpenGL_Util.Physics
             foreach (var go in GameBase.Main?.Grid.GetGameObjects() ?? Array.Empty<IGameObject>())
                 if (go.Collider != null)
                     if (CollidesWith(go.Collider))
-                        Colliding.Add(go.Collider);
+                        Colliding.Add(go);
         }
     }
     
@@ -102,7 +102,7 @@ namespace OpenGL_Util.Physics
             // check for collisions
             if (Collider.Colliding.Count > 0)
             { // todo: transport forces to the colliding objects
-                Debug.WriteLine("Collided with " + Collider.ColliderType);
+                Debug.WriteLine(GameObject.Metadata + " collided with " + string.Join(',', Collider.Colliding.Select(it => it.Metadata)));
             }
 
             // apply to gameobject

@@ -2,6 +2,37 @@
 
 namespace OpenGL_Util.Model
 {
+    public class DeltaTransform : ITransform
+    {
+        public DeltaTransform(ITransform transform) : this(transform, Vector3.Zero)
+        {
+        }
+
+        public DeltaTransform(ITransform transform, Vector3 positionDelta) : this(transform, positionDelta, Quaternion.Identity)
+        {
+        }
+
+        public DeltaTransform(ITransform transform, Vector3 positionDelta, Quaternion rotationDelta) : this(transform, positionDelta, rotationDelta, Vector3.One)
+        {
+        }
+
+        public DeltaTransform(ITransform transform, Vector3 positionDelta, Quaternion rotationDelta, Vector3 scaleDelta)
+        {
+            Transform = transform;
+            PositionDelta = positionDelta;
+            RotationDelta = rotationDelta;
+            ScaleDelta = scaleDelta;
+        }
+
+        public ITransform Transform { get; }
+        public Vector3 PositionDelta { get; set; }
+        public Vector3 Position => Transform.Position + PositionDelta;
+        public Quaternion RotationDelta { get; set; } 
+        public Quaternion Rotation => Transform.Rotation * RotationDelta;
+        public Vector3 ScaleDelta { get; set; }
+        public Vector3 Scale => Transform.Scale * ScaleDelta;
+    }
+    
     public class Singularity : ITransform
     {
         public Singularity() : this(Vector3.Zero)
