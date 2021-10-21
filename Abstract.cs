@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using OpenGL_Util.Model;
 using OpenGL_Util.Physics;
@@ -20,6 +22,8 @@ namespace OpenGL_Util
         public virtual Quaternion Rotation => Transform.Rotation;
         public virtual Vector3 Scale => Transform.Scale;
         public abstract IRenderObject RenderObject { get; }
+        public virtual IPhysicsObject? PhysicsObject => null;
+        public virtual ICollider? Collider => null;
         public short Metadata { get; set; }
         
         public virtual void Dispose() { }

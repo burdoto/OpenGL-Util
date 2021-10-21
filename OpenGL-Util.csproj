@@ -6,7 +6,7 @@
     <ApplicationIcon />
     <StartupObject />
     <Nullable>enable</Nullable>
-    <TargetFrameworks>net46;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

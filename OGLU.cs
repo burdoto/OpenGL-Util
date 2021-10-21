@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
 using OpenGL_Util.Model;
+using OpenGL_Util.Physics;
 using SharpGL;
 using SharpGL.SceneGraph;
 
@@ -44,6 +45,8 @@ namespace OpenGL_Util
         Quaternion ITransform.Rotation => Transform.Rotation;
         Vector3 ITransform.Scale => Transform.Scale;
         IRenderObject RenderObject { get; }
+        IPhysicsObject? PhysicsObject { get; }
+        ICollider? Collider { get; }
         short Metadata { get; set; }
     }
 
