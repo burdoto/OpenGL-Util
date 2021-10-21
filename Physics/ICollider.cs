@@ -32,5 +32,6 @@ namespace OpenGL_Util.Physics
         bool PointInside(Vector3 point);
         ColliderType ColliderType { get; }
         ISet<IGameObject> Colliding { get; }
+        bool ActiveCollider { get; set; }
     }
 }

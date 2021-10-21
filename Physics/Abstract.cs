@@ -24,6 +24,7 @@ namespace OpenGL_Util.Physics
         public Vector3 Scale => Transform.Scale;
         public ColliderType ColliderType => _type;
         public ISet<IGameObject> Colliding { get; } = new HashSet<IGameObject>();
+        public bool ActiveCollider { get; set; } = false;
 
         public abstract bool CollidesWith(ICollider other);
         public abstract bool PointInside(Vector2 point);
@@ -31,6 +32,9 @@ namespace OpenGL_Util.Physics
 
         protected override void _Tick()
         {
+            if (!ActiveCollider)
+                return;
+            
             Colliding.Clear();
 
             foreach (var go in GameBase.Main?.Grid.GetGameObjects() ?? Array.Empty<IGameObject>())
@@ -80,11 +84,12 @@ namespace OpenGL_Util.Physics
 
         public IGameObject GameObject { get; }
         public virtual Vector3 Gravity => Physics.Gravity;
+        public Vector3 Velocity { get; set; }
+        public Quaternion RotationVelocity { get; set; }
+        public float Mass { get; set; }
         public ITransform Transform => GameObject.Transform;
         public ICollider Collider => GameObject.Collider!;
-        public Vector3 Velocity { get; set; } = Vector3.Zero;
-        public Quaternion RotationVelocity { get; set; } = Quaternion.Identity;
-        public float Inertia { get; set; } = 0;
+        public float Inertia { get; set; }
         
         public void ApplyAcceleration(Vector3 force) => Velocity += force * force;
 
@@ -100,9 +105,32 @@ namespace OpenGL_Util.Physics
             base.Tick();
             
             // check for collisions
-            if (Collider.Colliding.Count > 0)
-            { // todo: transport forces to the colliding objects
+            if (Collider.Colliding.Count > 0 && Velocity != Vector3.Zero)
+            {
+                // todo: transport forces to the colliding objects
                 Debug.WriteLine(GameObject.Metadata + " collided with " + string.Join(',', Collider.Colliding.Select(it => it.Metadata)));
+
+                foreach (var other in Collider.Colliding)
+                {
+                    var energy0 = Velocity * Mass;
+                    var energy1 = other.PhysicsObject?.Velocity * other.PhysicsObject?.Mass ?? Vector3.Zero;
+                    var totalEnergy = energy0 + energy1;
+                    var myFactor = 1 / (other.PhysicsObject?.Mass / Mass) ?? 1;
+                    var myOutput = totalEnergy * myFactor;
+                    if (myOutput.Magnitude() > totalEnergy.Magnitude())
+                        throw new NotSupportedException("no");
+                    if (other.PhysicsObject == null)
+                    {
+                        // other is immovable
+                        Velocity = totalEnergy / Mass;
+                    }
+                    else
+                    {
+                        // todo: outputs need to be translated
+                        Velocity = myOutput / Mass;
+                        other.PhysicsObject.Velocity = (totalEnergy - myOutput) / Mass;
+                    }
+                }
             }
 
             // apply to gameobject

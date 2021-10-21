@@ -18,6 +18,8 @@ namespace OpenGL_Util.Physics
 
         public static bool CheckAABBCC(ICollider rect1, ICollider rect2)
         {
+            if (rect1 == rect2)
+                return false;
             throw new System.NotImplementedException();
         }
 
@@ -50,6 +52,8 @@ namespace OpenGL_Util.Physics
 
         public static bool CheckOverlapping(ICollider sphere1, ICollider sphere2)
         {
+            if (sphere1 == sphere2)
+                return false;
             throw new System.NotImplementedException();
         }
 

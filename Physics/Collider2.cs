@@ -13,6 +13,8 @@ namespace OpenGL_Util.Physics
 
         public static bool CheckOverlap(ICollider rect, ICollider check)
         {
+            if (rect == check)
+                return false;
             var v3 = rect.Position + Vector3.Transform(rect.Scale, rect.Rotation);
             var v2 = v3.Vector2();
             if (check.PointInside(v2))
@@ -43,13 +45,15 @@ namespace OpenGL_Util.Physics
 
         public static bool CheckOverlap(ICollider circle, ICollider check)
         {
+            if (circle == check)
+                return false;
             switch (check.ColliderType)
             {
                 case ColliderType.d2_Circle:
                     var dist = Vector2.Distance(circle.Position.Vector2(), check.Position.Vector2());
                     var r1 = circle.Scale.X;
                     var r2 = check.Scale.X;
-                    return r1 - r2 < dist || dist < r1 + r2;
+                    return dist < r1 + r2;
                 case ColliderType.d2_Rect:
                     return RectCollider.CheckOverlap(check, circle);
                 default:

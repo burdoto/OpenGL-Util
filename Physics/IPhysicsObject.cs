@@ -7,6 +7,7 @@ namespace OpenGL_Util.Physics
     public static class Physics
     {
         public static Vector3 Gravity = Vector3.Zero;
+        public static float Friction = 0.93f;
     }
 
     public interface IPhysicsObject : ITickable, ITransform
@@ -20,8 +21,9 @@ namespace OpenGL_Util.Physics
         public ITransform Transform { get; }
         public ICollider Collider { get; }
         public Vector3 Gravity  { get; }
-        public Vector3 Velocity { get; } // in units per second
-        public Quaternion RotationVelocity { get; } // in units per second 
+        public Vector3 Velocity { get; set; } // in units per second
+        public Quaternion RotationVelocity { get; set; } // in units per second 
+        public float Mass { get; set; } // in grams
 
         public void ApplyAcceleration(Vector3 force);
     }
