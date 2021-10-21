@@ -54,6 +54,7 @@ namespace OpenGL_Util.Physics
         public ICollider Collider => GameObject.Collider!;
         public Vector3 Velocity { get; set; } = Vector3.Zero;
         public Quaternion RotationVelocity { get; set; } = Quaternion.Identity;
+        public float Inertia { get; set; } = 0;
         
         public void ApplyAcceleration(Vector3 force) => Velocity += force * force;
 
@@ -62,6 +63,9 @@ namespace OpenGL_Util.Physics
             // apply gravity to velocity
             if (Gravity != Vector3.Zero)
                 ApplyAcceleration(Gravity);
+            float scale = GameBase.TimeDelta / 1000f;
+            if (Inertia != 0)
+                Velocity *= Inertia * scale * 10;
 
             base.Tick();
             
