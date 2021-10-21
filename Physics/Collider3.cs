@@ -9,6 +9,8 @@ namespace OpenGL_Util.Physics
         {
         }
 
+        public static bool CheckPointInCuboid(ICollider a, Vector2 b) => CheckPointInCuboid(a, new Vector3(b, a.Position.Z));
+
         public static bool CheckPointInCuboid(ICollider rect, Vector3 point)
         {
             throw new System.NotImplementedException();
@@ -24,7 +26,13 @@ namespace OpenGL_Util.Physics
             throw new System.NotImplementedException();
         }
 
-        public static bool CheckPointInCuboid(ICollider a, Vector2 b) => CheckPointInCuboid(a, new Vector3(b, a.Position.Z));
+        public override bool CollidesWith(ICollider other) => other.ColliderType == ColliderType.d3_Cuboid
+            ? CheckAABBCC(this, other)
+            : CheckPointsOverlapping(this, other);
+
+        public override bool PointInside(Vector2 point) => CheckPointInCuboid(this, point);
+
+        public override bool PointInside(Vector3 point) => CheckPointInCuboid(this, point);
     }
     
     public sealed class SphereCollider : AbstractCollider
@@ -32,6 +40,8 @@ namespace OpenGL_Util.Physics
         public SphereCollider(IGameObject gameObject) : base(gameObject, ColliderType.d3_Sphere)
         {
         }
+
+        public static bool CheckPointInSphere(ICollider a, Vector2 b) => CheckPointInSphere(a, new Vector3(b, a.Position.Z));
 
         public static bool CheckPointInSphere(ICollider sphere, Vector3 point)
         {
@@ -50,6 +60,12 @@ namespace OpenGL_Util.Physics
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-        public static bool CheckPointInSphere(ICollider a, Vector2 b) => CheckPointInSphere(a, new Vector3(b, a.Position.Z));
+        public override bool CollidesWith(ICollider other) => other.ColliderType == ColliderType.d3_Sphere
+            ? CheckOverlapping(this, other)
+            : CheckPointsOverlapping(this, other);
+
+        public override bool PointInside(Vector2 point) => CheckPointInSphere(this, point);
+
+        public override bool PointInside(Vector3 point) => CheckPointInSphere(this, point);
     }
 }

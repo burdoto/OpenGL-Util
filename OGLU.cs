@@ -16,6 +16,8 @@ namespace OpenGL_Util
         bool AddChild(IDisposable container);
 
         bool RemoveChild(IDisposable container);
+
+        IEnumerable<T> GetChildren<T>() where T : IDisposable;
     }
 
     public interface ILoadable : IDisposable

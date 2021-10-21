@@ -5,7 +5,7 @@ namespace OpenGL_Util.Physics
     public enum ColliderType
     {
         // 2 dimensional
-        d2_Square,
+        d2_Rect,
         d2_Circle,
         
         // 3 dimensional

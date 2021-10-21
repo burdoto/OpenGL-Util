@@ -21,9 +21,10 @@ namespace OpenGL_Util
         public virtual Vector3 Position => Transform.Position;
         public virtual Quaternion Rotation => Transform.Rotation;
         public virtual Vector3 Scale => Transform.Scale;
-        public abstract IRenderObject RenderObject { get; }
-        public virtual IPhysicsObject? PhysicsObject => null;
-        public virtual ICollider? Collider => null;
+        public IRenderObject RenderObject { get; protected set; }
+        public IPhysicsObject? PhysicsObject { get; protected set; }
+        public ICollider? Collider  { get; protected set; }
+        public override IEnumerable<IDisposable> Children => PhysicsObject == null ? _children : _children.Append(PhysicsObject);
         public short Metadata { get; set; }
         
         public virtual void Dispose() { }

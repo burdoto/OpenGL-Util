@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace OpenGL_Util.Model
 {
     public abstract class Container : ITickable
     {
-        private readonly List<IDisposable> _children = new List<IDisposable>();
+        protected readonly List<IDisposable> _children = new List<IDisposable>();
         private bool _loaded, _enabled;
         public bool Loaded => _loaded;
         public bool Enabled => Loaded && _enabled;
-        public IEnumerable<IDisposable> Children => _children;
+        public virtual IEnumerable<IDisposable> Children => _children;
 
-        public bool Load()
+        public virtual bool Load()
         {
             Debug.WriteLine("Loading " + this);
             foreach (var container in _children)
@@ -21,7 +22,7 @@ namespace OpenGL_Util.Model
             return !Loaded && (_loaded = _Load());
         }
 
-        public bool Enable()
+        public virtual bool Enable()
         {
             Debug.WriteLine("Enabling " + this);
             foreach (var container in _children)
@@ -30,7 +31,7 @@ namespace OpenGL_Util.Model
             return Loaded && (_enabled = _Enable());
         }
 
-        public void Tick()
+        public virtual void Tick()
         {
             if (!Enabled)
                 return;
@@ -40,7 +41,7 @@ namespace OpenGL_Util.Model
                     tickable.Tick();
         }
 
-        public void Disable()
+        public virtual void Disable()
         {
             if (!Enabled)
                 return;
@@ -52,7 +53,7 @@ namespace OpenGL_Util.Model
             _enabled = false;
         }
 
-        public void Unload()
+        public virtual void Unload()
         {
             if (!Loaded)
                 return;
@@ -64,14 +65,14 @@ namespace OpenGL_Util.Model
             _loaded = false;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Disable();
             Unload();
         }
 
 
-        public bool AddChild(IDisposable container)
+        public virtual bool AddChild(IDisposable container)
         {
             if (_children.Contains(container))
                 return false;
@@ -79,10 +80,12 @@ namespace OpenGL_Util.Model
             return true;
         }
 
-        public bool RemoveChild(IDisposable container)
+        public virtual bool RemoveChild(IDisposable container)
         {
             return _children.Remove(container);
         }
+
+        public IEnumerable<T> GetChildren<T>() where T : IDisposable => _children.Where(it => it.GetType() == typeof(T)).Cast<T>();
 
         protected virtual bool _Load() => true;
         protected virtual bool _Enable() => true;

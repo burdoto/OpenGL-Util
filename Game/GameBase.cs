@@ -10,6 +10,8 @@ namespace OpenGL_Util.Game
 {
     public abstract class GameBase : Container, IDrawable
     {
+        public static GameBase? Main { get; private set; }
+        
         protected GameBase() : this(new RenderMatrix())
         {
         }
@@ -21,10 +23,11 @@ namespace OpenGL_Util.Game
         protected GameBase(RenderMatrix renderMatrix)
         {
             RenderMatrix = renderMatrix;
+            Main = this;
         }
 
         public int BaseTickTime { get; protected set; } = -1;
-        public long TimeDelta { get; private set; }
+        public static long TimeDelta { get; private set; }
         public bool Active { get; set; }
         public RenderMatrix RenderMatrix { get; }
         public GridMatrix Grid => RenderMatrix.Grid;
