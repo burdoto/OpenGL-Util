@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using OpenGL_Util.Game;
@@ -9,18 +10,18 @@ namespace OpenGL_Util.Physics
 {
     public abstract class AbstractCollider : Container, ICollider
     {
-        public IGameObject GameObject { get; }
+        public ITransform Transform { get; }
         private readonly ColliderType _type;
 
-        public AbstractCollider(IGameObject gameObject, ColliderType type)
+        public AbstractCollider(ITransform transform, ColliderType type)
         {
-            GameObject = gameObject;
+            Transform = transform;
             _type = type;
         }
 
-        public Vector3 Position => GameObject.Position;
-        public Quaternion Rotation => GameObject.Rotation;
-        public Vector3 Scale => GameObject.Scale;
+        public Vector3 Position => Transform.Position;
+        public Quaternion Rotation => Transform.Rotation;
+        public Vector3 Scale => Transform.Scale;
         public ColliderType ColliderType => _type;
         public IList<ICollider> Colliding { get; } = new List<ICollider>();
 
@@ -37,6 +38,21 @@ namespace OpenGL_Util.Physics
                     if (CollidesWith(go.Collider))
                         Colliding.Add(go.Collider);
         }
+    }
+
+    public class MultiCollider : AbstractCollider
+    {
+        public List<AbstractCollider> Colliders { get; } = new List<AbstractCollider>();
+        
+        public MultiCollider(IGameObject gameObject, ColliderType type) : base(gameObject, type)
+        {
+        }
+
+        public override bool CollidesWith(ICollider other) => Colliders.Any(it => it.CollidesWith(other));
+
+        public override bool PointInside(Vector2 point) => Colliders.Any(it => it.PointInside(point));
+
+        public override bool PointInside(Vector3 point) => Colliders.Any(it => it.PointInside(point));
     }
     
     public class PhysicsObject : Container, IPhysicsObject
@@ -61,15 +77,16 @@ namespace OpenGL_Util.Physics
             // apply gravity to velocity
             if (Gravity != Vector3.Zero)
                 ApplyAcceleration(Gravity);
-            float scale = GameBase.TimeDelta / 1000f;
-            if (Inertia != 0)
-                Velocity *= Inertia * scale * 10;
+            const float scala = 100;
+            float scale = GameBase.TickTime / scala;
+            Velocity *= Inertia;
 
             base.Tick();
             
             // check for collisions
             if (Collider.Colliding.Count > 0)
             { // todo: transport forces to the colliding objects
+                Debug.WriteLine("Collided with " + Collider.Colliding);
             }
 
             // apply to gameobject

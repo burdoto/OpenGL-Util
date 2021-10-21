@@ -5,11 +5,13 @@ using System.Threading;
 using OpenGL_Util.Matrix;
 using OpenGL_Util.Model;
 using SharpGL;
+using Timer = System.Timers.Timer;
 
 namespace OpenGL_Util.Game
 {
     public abstract class GameBase : Container, IDrawable
     {
+        public const int TickTime = 50;
         public static GameBase? Main { get; private set; }
         
         protected GameBase() : this(new RenderMatrix(new ShortLongMatrix()))
@@ -27,7 +29,7 @@ namespace OpenGL_Util.Game
         }
 
         public int BaseTickTime { get; protected set; } = -1;
-        public static long TimeDelta { get; private set; }
+        public static long TimeDelta { get; private set; } = TickTime;
         public bool Active { get; set; }
         public RenderMatrix RenderMatrix { get; }
         public GridMatrix Grid => RenderMatrix.Grid;
@@ -76,16 +78,23 @@ namespace OpenGL_Util.Game
             if (!Enable())
                 throw new Exception("Could not enable game");
             Active = true;
-            long start;
-            while (Active)
+
+            long start = 0;
+            Timer timer = new Timer(TickTime);
+            timer.Elapsed += (sender, args) =>
             {
-                start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 Tick();
                 TimeDelta = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
-            }
-
-            Disable();
-            Unload();
+                start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                if (!Active)
+                    timer.Dispose();
+            };
+            timer.Disposed += (sender, args) =>
+            {
+                Disable();
+                Unload();
+            };
+            timer.Start();
         }
     }
 }

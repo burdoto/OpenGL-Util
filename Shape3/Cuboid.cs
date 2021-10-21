@@ -22,15 +22,21 @@ namespace OpenGL_Util.Shape3
             BACK = -0x4
         }
 
-        public Cuboid(IGameObject gameObject, Color color)
+        public Cuboid(IGameObject gameObject, Color color) : this(gameObject, gameObject.Transform, color)
+        {
+        }
+
+        public Cuboid(IGameObject gameObject, ITransform transform, Color color)
         {
             GameObject = gameObject;
+            Transform = transform;
             Color = color;
         }
 
         public Color Color { get; }
 
         public IGameObject GameObject { get; }
+        public ITransform Transform { get; }
         public Vector3 Position => GameObject.Position;
 
         public Quaternion Rotation => GameObject.Rotation;

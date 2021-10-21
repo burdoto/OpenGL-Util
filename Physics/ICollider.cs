@@ -6,6 +6,9 @@ namespace OpenGL_Util.Physics
 {
     public enum ColliderType
     {
+        // other
+        OtherUnknown,
+        
         // 2 dimensional
         d2_Rect,
         d2_Circle,
@@ -18,11 +21,11 @@ namespace OpenGL_Util.Physics
     
     public interface ICollider : ITransform, ITickable
     {
-        IGameObject GameObject { get; }
+        ITransform Transform { get; }
 
-        Vector3 ITransform.Position => GameObject.Position;
-        Quaternion ITransform.Rotation => GameObject.Rotation;
-        Vector3 ITransform.Scale => GameObject.Scale;
+        Vector3 ITransform.Position => Transform.Position;
+        Quaternion ITransform.Rotation => Transform.Rotation;
+        Vector3 ITransform.Scale => Transform.Scale;
 
         bool CollidesWith(ICollider other);
         bool PointInside(Vector2 point);

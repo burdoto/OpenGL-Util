@@ -7,7 +7,7 @@ namespace OpenGL_Util.Physics
 {   
     public sealed class RectCollider : AbstractCollider
     {
-        public RectCollider(IGameObject gameObject) : base(gameObject, ColliderType.d2_Rect)
+        public RectCollider(ITransform transform) : base(transform, ColliderType.d2_Rect)
         {
         }
 
@@ -37,7 +37,7 @@ namespace OpenGL_Util.Physics
     
     public sealed class CircleCollider : AbstractCollider
     {
-        public CircleCollider(IGameObject gameObject) : base(gameObject, ColliderType.d2_Circle)
+        public CircleCollider(ITransform transform) : base(transform, ColliderType.d2_Circle)
         {
         }
 

@@ -55,9 +55,10 @@ namespace OpenGL_Util
     public interface IRenderObject : ITransform, IDrawable
     {
         IGameObject GameObject { get; }
-        Vector3 ITransform.Position => GameObject.Position;
-        Quaternion ITransform.Rotation => GameObject.Rotation;
-        Vector3 ITransform.Scale => GameObject.Scale;
+        ITransform Transform => GameObject.Transform;
+        Vector3 ITransform.Position => Transform.Position;
+        Quaternion ITransform.Rotation => Transform.Rotation;
+        Vector3 ITransform.Scale => Transform.Scale;
     }
 
     public interface IDrawable

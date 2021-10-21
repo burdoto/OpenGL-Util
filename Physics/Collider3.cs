@@ -5,7 +5,7 @@ namespace OpenGL_Util.Physics
 {
     public sealed class CuboidCollider : AbstractCollider
     {
-        public CuboidCollider(IGameObject gameObject) : base(gameObject, ColliderType.d3_Sphere)
+        public CuboidCollider(ITransform transform) : base(transform, ColliderType.d3_Sphere)
         {
         }
 
@@ -37,7 +37,7 @@ namespace OpenGL_Util.Physics
     
     public sealed class SphereCollider : AbstractCollider
     {
-        public SphereCollider(IGameObject gameObject) : base(gameObject, ColliderType.d3_Sphere)
+        public SphereCollider(ITransform transform) : base(transform, ColliderType.d3_Sphere)
         {
         }
 
