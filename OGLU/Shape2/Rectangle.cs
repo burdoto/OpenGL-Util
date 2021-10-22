@@ -8,11 +8,19 @@ namespace OGLU.Shape2
 {
     public class Rectangle : AbstractRenderObject
     {
-        public Rectangle(IGameObject gameObject) : this(gameObject, Color.White)
+        public Rectangle(IGameObject gameObject) : this(gameObject, gameObject)
         {
         }
 
-        public Rectangle(IGameObject gameObject, Color color) : base(gameObject)
+        public Rectangle(IGameObject gameObject, ITransform transform) : this(gameObject, transform, Color.White)
+        {
+        }
+
+        public Rectangle(IGameObject gameObject, Color color) : this(gameObject, gameObject, color)
+        {
+        }
+
+        public Rectangle(IGameObject gameObject, ITransform transform, Color color) : base(gameObject, transform)
         {
             Color = color;
         }
