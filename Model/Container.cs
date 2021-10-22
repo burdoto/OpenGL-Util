@@ -8,8 +8,9 @@ namespace OpenGL_Util.Model
     public abstract class Container : ITickable
     {
         protected readonly List<IDisposable> _children = new List<IDisposable>();
-        private bool _loaded, _enabled;
-        public bool Loaded => _loaded;
+        private bool _enabled;
+        public bool Loaded { get; private set; }
+
         public bool Enabled => Loaded && _enabled;
         public virtual IEnumerable<IDisposable> Children => _children;
 
@@ -19,7 +20,7 @@ namespace OpenGL_Util.Model
             foreach (var container in Children)
                 if (container is ILoadable loadable)
                     loadable.Load();
-            return !Loaded && (_loaded = _Load());
+            return !Loaded && (Loaded = _Load());
         }
 
         public virtual bool Enable()
@@ -62,7 +63,7 @@ namespace OpenGL_Util.Model
                 if (container is ILoadable loadable)
                     loadable.Unload();
             _Unload();
-            _loaded = false;
+            Loaded = false;
         }
 
         public virtual void Dispose()
@@ -85,15 +86,31 @@ namespace OpenGL_Util.Model
             return _children.Remove(container);
         }
 
-        public IEnumerable<T> GetChildren<T>() where T : IDisposable => _children.Where(it => it.GetType() == typeof(T)).Cast<T>();
+        public IEnumerable<T> GetChildren<T>() where T : IDisposable
+        {
+            return _children.Where(it => it.GetType() == typeof(T)).Cast<T>();
+        }
 
-        protected virtual bool _Load() => true;
-        protected virtual bool _Enable() => true;
+        protected virtual bool _Load()
+        {
+            return true;
+        }
 
-        protected virtual void _Tick() {}
+        protected virtual bool _Enable()
+        {
+            return true;
+        }
 
-        protected virtual void _Disable() {}
+        protected virtual void _Tick()
+        {
+        }
 
-        protected virtual void _Unload() {}
+        protected virtual void _Disable()
+        {
+        }
+
+        protected virtual void _Unload()
+        {
+        }
     }
 }

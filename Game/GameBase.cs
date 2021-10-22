@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Numerics;
-using System.Threading;
+using System.Timers;
 using OpenGL_Util.Matrix;
 using OpenGL_Util.Model;
 using SharpGL;
-using Timer = System.Timers.Timer;
 
 namespace OpenGL_Util.Game
 {
     public abstract class GameBase : Container, IDrawable
     {
         public const int TickTime = 20;
-        
-        public static GameBase? Main { get; private set; }
-        
+
         protected GameBase() : this(new ShortLongMatrix())
         {
         }
-        
+
         protected GameBase(GridMatrix gridMatrix) : this(new RenderMatrix(gridMatrix))
         {
         }
@@ -29,7 +25,9 @@ namespace OpenGL_Util.Game
             RenderMatrix = renderMatrix;
             Main = this;
         }
-        
+
+        public static GameBase? Main { get; private set; }
+
         public static long TimeDelta { get; private set; }
         public bool Active { get; set; }
         public RenderMatrix RenderMatrix { get; }
@@ -40,10 +38,10 @@ namespace OpenGL_Util.Game
         {
             var cam = camera.Position;
             var look = cam + Vector3.Transform(-Vector3.UnitZ, camera.Rotation);
-            gl.LookAt(cam.X, cam.Y, cam.Z, 
-                look.X,look.Y,look.Z, 
+            gl.LookAt(cam.X, cam.Y, cam.Z,
+                look.X, look.Y, look.Z,
                 0, 1, 0);
-            
+
             RenderMatrix.Draw(gl, Camera);
             /*
             foreach (var render in Children

@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using OpenGL_Util.Shape3;
 
 namespace OpenGL_Util.Matrix
 {
@@ -56,9 +54,12 @@ namespace OpenGL_Util.Matrix
             _objs.Clear();
         }
 
-        public override IEnumerable<IGameObject> GetGameObjects() => _objs.Values
-            .Where(it => it != null)
-            .Select(it => it!);
+        public override IEnumerable<IGameObject> GetGameObjects()
+        {
+            return _objs.Values
+                .Where(it => it != null)
+                .Select(it => it!);
+        }
     }
 
     public class ListMatrix : GridMatrix
@@ -70,7 +71,7 @@ namespace OpenGL_Util.Matrix
             get => _objs.First(it => it.Position == vec);
             set
             {
-                var index = _objs.FindIndex(it => it.Position == vec);
+                int index = _objs.FindIndex(it => it.Position == vec);
                 if (index != -1)
                     _objs[index] = value!;
                 else _objs.Add(value!);
@@ -87,9 +88,12 @@ namespace OpenGL_Util.Matrix
             _objs.Clear();
         }
 
-        public override IEnumerable<IGameObject> GetGameObjects() => _objs
-            .Where(it => it != null)
-            .Select(it => it!);
+        public override IEnumerable<IGameObject> GetGameObjects()
+        {
+            return _objs
+                .Where(it => it != null)
+                .Select(it => it!);
+        }
     }
 
     public class MapMatrix : GridMatrix
@@ -134,10 +138,13 @@ namespace OpenGL_Util.Matrix
             _matrix.Clear();
         }
 
-        public override IEnumerable<IGameObject> GetGameObjects() => _matrix.Values
-            .SelectMany(x => x.Values)
-            .SelectMany(y => y.Values)
-            .Where(it => it != null)
-            .Select(it => it!);
+        public override IEnumerable<IGameObject> GetGameObjects()
+        {
+            return _matrix.Values
+                .SelectMany(x => x.Values)
+                .SelectMany(y => y.Values)
+                .Where(it => it != null)
+                .Select(it => it!);
+        }
     }
 }

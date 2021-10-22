@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Numerics;
 using OpenGL_Util.Model;
 using OpenGL_Util.Physics;
@@ -43,13 +42,13 @@ namespace OpenGL_Util
     public interface IGameObject : ITransform
     {
         Singularity Transform { get; }
-        Vector3 ITransform.Position => Transform.Position;
-        Quaternion ITransform.Rotation => Transform.Rotation;
-        Vector3 ITransform.Scale => Transform.Scale;
         List<IRenderObject> RenderObjects { get; }
         IPhysicsObject? PhysicsObject { get; }
         ICollider? Collider { get; }
         short Metadata { get; set; }
+        Vector3 ITransform.Position => Transform.Position;
+        Quaternion ITransform.Rotation => Transform.Rotation;
+        Vector3 ITransform.Scale => Transform.Scale;
     }
 
     public interface IRenderObject : ITransform, IDrawable
@@ -79,17 +78,35 @@ namespace OpenGL_Util
 
     public static class Extensions
     {
-        public static Vertex Vertex(this Vector3 a) => new Vertex(a.X, a.Y, a.Z);
+        public static Vertex Vertex(this Vector3 a)
+        {
+            return new Vertex(a.X, a.Y, a.Z);
+        }
 
-        public static Vertex Convert(this ObjParser.Types.Vertex a) => new Vertex((float) a.X, (float) a.Y, (float) a.Z);
+        public static Vertex Convert(this ObjParser.Types.Vertex a)
+        {
+            return new Vertex((float)a.X, (float)a.Y, (float)a.Z);
+        }
 
-        public static Vector2 Vector2(this Vector3 a) => new Vector2(a.X, a.Y);
+        public static Vector2 Vector2(this Vector3 a)
+        {
+            return new Vector2(a.X, a.Y);
+        }
 
-        public static Vector3 Vector(this Vertex a) => new Vector3(a.X, a.Y, a.Z);
+        public static Vector3 Vector(this Vertex a)
+        {
+            return new Vector3(a.X, a.Y, a.Z);
+        }
 
-        public static Vector3 IntCast(this Vector3 a) => new Vector3((int)a.X, (int)a.Y, (int)a.Z);
-        
-        public static Vector3 ShortCast(this Vector3 a) => new Vector3((short)a.X, (short)a.Y, (short)a.Z);
+        public static Vector3 IntCast(this Vector3 a)
+        {
+            return new Vector3((int)a.X, (int)a.Y, (int)a.Z);
+        }
+
+        public static Vector3 ShortCast(this Vector3 a)
+        {
+            return new Vector3((short)a.X, (short)a.Y, (short)a.Z);
+        }
 
         public static long CombineIntoLong(this Vector3 a, short metadata)
         {
@@ -102,10 +119,10 @@ namespace OpenGL_Util
             long v = 0;
             const byte off = 16;
 
-            v |= ((short)a.X << off * 0);
-            v |= ((short)a.Y << off * 1);
-            v |= ((short)a.Z << off * 2);
-            v |= (metadata << off * 3);
+            v |= (short)a.X << (off * 0);
+            v |= (short)a.Y << (off * 1);
+            v |= (short)a.Z << (off * 2);
+            v |= metadata << (off * 3);
 
             return v;
         }
@@ -114,26 +131,39 @@ namespace OpenGL_Util
         {
             const byte off = 16;
 
-            short x = (short)(value >> off * 0);
-            short y = (short)(value >> off * 1);
-            short z = (short)(value >> off * 2);
-            short meta = (short)(value >> off * 3);
+            var x = (short)(value >> (off * 0));
+            var y = (short)(value >> (off * 1));
+            var z = (short)(value >> (off * 2));
+            var meta = (short)(value >> (off * 3));
 
             return new Vector4(x, y, z, meta);
         }
 
-        public static Vector3 ToVec3(this Vector4 vec) => vec.ToVec3(out float nil);
-        
+        public static Vector3 ToVec3(this Vector4 vec)
+        {
+            return vec.ToVec3(out float nil);
+        }
+
         public static Vector3 ToVec3(this Vector4 vec, out float metadata)
         {
             metadata = vec.W;
             return new Vector3(vec.X, vec.Y, vec.Z);
         }
 
-        public static float Magnitude(this Vector2 a) => MathF.Sqrt(a.X * a.X + a.Y * a.Y);
-        public static float Magnitude(this Vector3 a) => MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
+        public static float Magnitude(this Vector2 a)
+        {
+            return MathF.Sqrt(a.X * a.X + a.Y * a.Y);
+        }
 
-        public static Vector3 Normalize(this Vector3 a) => a / a.Magnitude();
+        public static float Magnitude(this Vector3 a)
+        {
+            return MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
+        }
+
+        public static Vector3 Normalize(this Vector3 a)
+        {
+            return a / a.Magnitude();
+        }
 
         public static Vector3 Forward(this Quaternion it)
         {
@@ -175,7 +205,7 @@ namespace OpenGL_Util
             double sqz = q.Z * q.Z;
 
             // If quaternion is normalised the unit is one, otherwise it is the correction factor
-            var unit = sqx + sqy + sqz + sqw;
+            double unit = sqx + sqy + sqz + sqw;
             double test = q.X * q.Y + q.Z * q.W;
 
             if (test > 0.4999f * unit) // 0.4999f OR 0.5f - EPSILON

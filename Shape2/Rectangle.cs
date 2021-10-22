@@ -1,8 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Numerics;
-using OpenGL_Util.Game;
-using OpenGL_Util.Model;
 using SharpGL;
 using SharpGL.Enumerations;
 using SharpGL.SceneGraph;
@@ -11,9 +8,6 @@ namespace OpenGL_Util.Shape2
 {
     public class Rectangle : AbstractRenderObject
     {
-        public Color Color { get; }
-        public bool Filled { get; set; } = true;
-
         public Rectangle(IGameObject gameObject) : this(gameObject, Color.White)
         {
         }
@@ -22,6 +16,9 @@ namespace OpenGL_Util.Shape2
         {
             Color = color;
         }
+
+        public Color Color { get; }
+        public bool Filled { get; set; } = true;
 
         public override void Draw(OpenGL gl, ITransform camera)
         {

@@ -5,11 +5,6 @@ namespace OpenGL_Util.Shape2
 {
     public class Text : AbstractRenderObject
     {
-        public string Content { get; set; }
-        public Color FontColor { get; set; } = Color.Red;
-        public string FontName { get; set; } = "Courier New";
-        public float FontSize { get; set; } = 12;
-        
         public Text(IGameObject gameObject) : base(gameObject)
         {
         }
@@ -18,7 +13,15 @@ namespace OpenGL_Util.Shape2
         {
         }
 
-        public override void Draw(OpenGL gl, ITransform camera) => 
-            gl.DrawText((int)Position.X, (int)Position.Y, FontColor.R, FontColor.G, FontColor.B, FontName, FontSize, Content);
+        public string Content { get; set; }
+        public Color FontColor { get; set; } = Color.Red;
+        public string FontName { get; set; } = "Courier New";
+        public float FontSize { get; set; } = 12;
+
+        public override void Draw(OpenGL gl, ITransform camera)
+        {
+            gl.DrawText((int)Position.X, (int)Position.Y, FontColor.R, FontColor.G, FontColor.B, FontName, FontSize,
+                Content);
+        }
     }
 }

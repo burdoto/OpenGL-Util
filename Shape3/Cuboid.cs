@@ -33,6 +33,8 @@ namespace OpenGL_Util.Shape3
 
         public Color Color { get; }
 
+        public byte[] ColorArray { get; }
+
         public override void Draw(OpenGL gl, ITransform camera)
         {
             gl.Color(Color);
@@ -141,7 +143,5 @@ namespace OpenGL_Util.Shape3
         {
             return true;
         }
-
-        public byte[] ColorArray { get; }
     }
 }
