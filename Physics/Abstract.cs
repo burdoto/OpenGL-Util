@@ -127,8 +127,8 @@ namespace OpenGL_Util.Physics
                     else
                     {
                         // todo: outputs need to be translated
-                        Velocity = myOutput / Mass;
                         other.PhysicsObject.Velocity = (totalEnergy - myOutput) / Mass;
+                        Velocity = myOutput / Mass;
                     }
                 }
             }
