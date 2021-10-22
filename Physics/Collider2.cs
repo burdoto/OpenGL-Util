@@ -19,10 +19,10 @@ namespace OpenGL_Util.Physics
         {
             if (rect == check)
                 return false;
-            v3 = rect.Position + Vector3.Transform(rect.Scale, rect.Rotation);
+            v3 = rect.Position + Vector3.Transform(rect.Scale / 2, rect.Rotation);
             if (check.PointInside(v3.Vector2()))
                 return true;
-            v3 = rect.Position + Vector3.Transform(-rect.Scale, rect.Rotation);
+            v3 = rect.Position + Vector3.Transform(-rect.Scale / 2, rect.Rotation);
             if (check.PointInside(v3.Vector2()))
                 return true;
             return !recursive && check.CollidesWith(rect, ref v3, true, z);
@@ -30,8 +30,8 @@ namespace OpenGL_Util.Physics
         
         public static bool CheckPointInRect(ICollider rect, Vector2 point)
         {
-            var aa = rect.Position.Vector2() + Vector2.Transform(rect.Scale.Vector2(), rect.Rotation);
-            var bb = rect.Position.Vector2() + Vector2.Transform((-rect.Scale).Vector2(), rect.Rotation);
+            var aa = rect.Position.Vector2() + Vector2.Transform((rect.Scale / 2).Vector2(), rect.Rotation);
+            var bb = rect.Position.Vector2() + Vector2.Transform((-rect.Scale / 2).Vector2(), rect.Rotation);
             return aa.X > point.X && aa.Y > point.Y && bb.X < point.X && bb.Y < point.Y;
         }
 
