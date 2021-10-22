@@ -21,17 +21,32 @@ namespace OpenGL_Util.Physics
     
     public interface ICollider : ITransform, ITickable
     {
+        IGameObject GameObject { get; }
         ITransform Transform { get; }
 
         Vector3 ITransform.Position => Transform.Position;
         Quaternion ITransform.Rotation => Transform.Rotation;
         Vector3 ITransform.Scale => Transform.Scale;
 
-        bool CollidesWith(ICollider other);
+        bool CollidesWith(ICollider other, ref Vector3 v3, bool recursive = false, float z = 0);
         bool PointInside(Vector2 point);
         bool PointInside(Vector3 point);
         ColliderType ColliderType { get; }
-        ISet<IGameObject> Colliding { get; }
+        ISet<Collision> Collisions { get; }
         bool ActiveCollider { get; set; }
+    }
+
+    public readonly struct Collision
+    {
+        public readonly IGameObject Active;
+        public readonly IGameObject Other;
+        public readonly Vector3 Position;
+
+        public Collision(IGameObject active, IGameObject other, Vector3 point)
+        {
+            Active = active;
+            Other = other;
+            Position = point;
+        }
     }
 }

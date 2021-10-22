@@ -5,7 +5,11 @@ namespace OpenGL_Util.Physics
 {
     public sealed class CuboidCollider : AbstractCollider
     {
-        public CuboidCollider(ITransform transform) : base(transform, ColliderType.d3_Sphere)
+        public CuboidCollider(IGameObject gameObject) : this(gameObject, gameObject)
+        {
+        }
+
+        public CuboidCollider(IGameObject gameObject,ITransform transform) : base(gameObject,transform, ColliderType.d3_Sphere)
         {
         }
 
@@ -28,7 +32,7 @@ namespace OpenGL_Util.Physics
             throw new System.NotImplementedException();
         }
 
-        public override bool CollidesWith(ICollider other) => other.ColliderType == ColliderType.d3_Cuboid
+        public override bool CollidesWith(ICollider other, ref Vector3 v3, bool recursive = false, float _ = 0) => other.ColliderType == ColliderType.d3_Cuboid
             ? CheckAABBCC(this, other)
             : CheckPointsOverlapping(this, other);
 
@@ -39,7 +43,11 @@ namespace OpenGL_Util.Physics
     
     public sealed class SphereCollider : AbstractCollider
     {
-        public SphereCollider(ITransform transform) : base(transform, ColliderType.d3_Sphere)
+        public SphereCollider(IGameObject gameObject) : this(gameObject, gameObject)
+        {
+        }
+
+        public SphereCollider(IGameObject gameObject,ITransform transform) : base(gameObject,transform, ColliderType.d3_Sphere)
         {
         }
 
@@ -64,7 +72,7 @@ namespace OpenGL_Util.Physics
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-        public override bool CollidesWith(ICollider other) => other.ColliderType == ColliderType.d3_Sphere
+        public override bool CollidesWith(ICollider other, ref Vector3 v3, bool recursive = false, float _ = 0) => other.ColliderType == ColliderType.d3_Sphere
             ? CheckOverlapping(this, other)
             : CheckPointsOverlapping(this, other);
 

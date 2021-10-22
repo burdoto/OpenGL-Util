@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -15,7 +16,7 @@ namespace OpenGL_Util.Game
         
         public static GameBase? Main { get; private set; }
         
-        protected GameBase() : this(new RenderMatrix(new ShortLongMatrix()))
+        protected GameBase() : this(new ShortLongMatrix())
         {
         }
         
@@ -43,7 +44,7 @@ namespace OpenGL_Util.Game
                 look.X,look.Y,look.Z, 
                 0, 1, 0);
             
-            RenderMatrix.Draw(gl, camera);
+            RenderMatrix.Draw(gl, Camera);
             /*
             foreach (var render in Children
                 .SelectMany(it =>
@@ -73,28 +74,44 @@ namespace OpenGL_Util.Game
 
         public void Run()
         {
-            if (!Load())
-                throw new Exception("Could not load game");
-            if (!Enable())
-                throw new Exception("Could not enable game");
-            Active = true;
+            try
+            {
+                if (!Load())
+                    throw new Exception("Could not load game");
+                if (!Enable())
+                    throw new Exception("Could not enable game");
+                Active = true;
 
-            long start = 0;
-            Timer timer = new Timer(TickTime);
-            timer.Elapsed += (sender, args) =>
+                long start = 0;
+                Timer timer = new Timer(TickTime);
+                timer.Elapsed += (sender, args) =>
+                {
+                    try
+                    {
+                        Tick();
+                        TimeDelta = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
+                        start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Exception occurred in tick, shutting down!\n" + e);
+                        Active = false;
+                    }
+
+                    if (!Active)
+                        timer.Dispose();
+                };
+                timer.Disposed += (sender, args) =>
+                {
+                    Disable();
+                    Unload();
+                };
+                timer.Start();
+            }
+            catch (Exception e)
             {
-                Tick();
-                TimeDelta = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
-                start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                if (!Active)
-                    timer.Dispose();
-            };
-            timer.Disposed += (sender, args) =>
-            {
-                Disable();
-                Unload();
-            };
-            timer.Start();
+                Debug.WriteLine("Could not start Game tick timer\n" + e);
+            }
         }
     }
 }

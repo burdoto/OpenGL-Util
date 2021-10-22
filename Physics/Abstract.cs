@@ -10,11 +10,13 @@ namespace OpenGL_Util.Physics
 {
     public abstract class AbstractCollider : Container, ICollider
     {
+        public IGameObject GameObject { get; }
         public ITransform Transform { get; }
         private readonly ColliderType _type;
 
-        public AbstractCollider(ITransform transform, ColliderType type)
+        public AbstractCollider(IGameObject gameObject, ITransform transform, ColliderType type)
         {
+            GameObject = gameObject;
             Transform = transform;
             _type = type;
         }
@@ -23,10 +25,10 @@ namespace OpenGL_Util.Physics
         public Quaternion Rotation => Transform.Rotation;
         public Vector3 Scale => Transform.Scale;
         public ColliderType ColliderType => _type;
-        public ISet<IGameObject> Colliding { get; } = new HashSet<IGameObject>();
+        public ISet<Collision> Collisions { get; } = new HashSet<Collision>();
         public bool ActiveCollider { get; set; } = false;
 
-        public abstract bool CollidesWith(ICollider other);
+        public abstract bool CollidesWith(ICollider other, ref Vector3 v3, bool recursive = false, float z = 0);
         public abstract bool PointInside(Vector2 point);
         public abstract bool PointInside(Vector3 point);
 
@@ -35,12 +37,12 @@ namespace OpenGL_Util.Physics
             if (!ActiveCollider)
                 return;
             
-            Colliding.Clear();
-
+            Collisions.Clear();
+            Vector3 pos = Vector3.Zero;
             foreach (var go in GameBase.Main?.Grid.GetGameObjects() ?? Array.Empty<IGameObject>())
                 if (go.Collider != null)
-                    if (CollidesWith(go.Collider))
-                        Colliding.Add(go);
+                    if (CollidesWith(go.Collider, ref pos))
+                        Collisions.Add(new Collision(GameObject, go, pos));
         }
     }
     
@@ -48,33 +50,19 @@ namespace OpenGL_Util.Physics
     {
         public ICollider Collider { get; } 
         
-        public InverseCollider(ICollider collider) : base(collider.Transform, collider.ColliderType)
+        public InverseCollider(ICollider collider) : base(collider.GameObject, collider.Transform, collider.ColliderType)
         {
             Collider = collider;
         }
 
-        public override bool CollidesWith(ICollider other) => !Collider.CollidesWith(other);
+        public override bool CollidesWith(ICollider other, ref Vector3 v3, bool recursive = false, float z = 0) =>
+            !Collider.CollidesWith(other, ref v3, recursive);
 
         public override bool PointInside(Vector2 point) => !Collider.PointInside(point);
 
         public override bool PointInside(Vector3 point) => !Collider.PointInside(point);
     }
 
-    public class MultiCollider : AbstractCollider
-    {
-        public List<AbstractCollider> Colliders { get; } = new List<AbstractCollider>();
-        
-        public MultiCollider(IGameObject gameObject, ColliderType type) : base(gameObject, type)
-        {
-        }
-
-        public override bool CollidesWith(ICollider other) => Colliders.Any(it => it.CollidesWith(other));
-
-        public override bool PointInside(Vector2 point) => Colliders.Any(it => it.PointInside(point));
-
-        public override bool PointInside(Vector3 point) => Colliders.Any(it => it.PointInside(point));
-    }
-    
     public class PhysicsObject : Container, IPhysicsObject
     {
         public PhysicsObject(IGameObject gameObject)
@@ -100,6 +88,7 @@ namespace OpenGL_Util.Physics
                 ApplyAcceleration(Gravity);
             const float scala = 100;
             float scale = GameBase.TickTime / scala;
+            // apply inertia to velocity
             if (Velocity.Magnitude() > 0.09f)
                 Velocity *= Inertia;
             else Velocity = Vector3.Zero;
@@ -107,23 +96,25 @@ namespace OpenGL_Util.Physics
             base.Tick();
             
             // check for collisions
-            if (Collider.Colliding.Count > 0 && Velocity != Vector3.Zero)
+            if (Collider.Collisions.Count > 0 && Velocity != Vector3.Zero)
             {
                 // todo: transport forces to the colliding objects
-                Debug.WriteLine(GameObject.Metadata + " collided with " + string.Join(',', Collider.Colliding.Select(it => it.Metadata)));
+                Debug.WriteLine(GameObject.Metadata + " collided with " + string.Join(',', Collider.Collisions.Select(it => it.Other.Metadata)));
 
-                foreach (var other in Collider.Colliding)
+                foreach (var collision in Collider.Collisions)
                 {
+                    var other = collision.Other;
                     var kinetic0 = Velocity * Mass;
                     var kinetic1 = other.PhysicsObject?.Velocity * other.PhysicsObject?.Mass ?? Vector3.Zero;
                     
                     // todo: other cases than circle collider
-                    
+
                     var hitAngle = 10;
                     var rot0 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, -hitAngle);
                     var rot1 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, hitAngle);
                     var totalEnergy = kinetic0 + kinetic1;
                     // todo: needs to take angular loss into account
+                    kinetic0 -= kinetic1;
                     var myFactor = 1 / (other.PhysicsObject?.Mass / Mass) ?? 1;
                     if (myFactor > 1)
                         throw new NotSupportedException("no");
