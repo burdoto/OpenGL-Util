@@ -83,11 +83,6 @@ namespace OpenGL_Util
             return new Vertex(a.X, a.Y, a.Z);
         }
 
-        public static Vertex Convert(this ObjParser.Types.Vertex a)
-        {
-            return new Vertex((float)a.X, (float)a.Y, (float)a.Z);
-        }
-
         public static Vector2 Vector2(this Vector3 a)
         {
             return new Vector2(a.X, a.Y);
