@@ -99,7 +99,7 @@ namespace OpenGL_Util.Physics
             if (Gravity != Vector3.Zero)
                 ApplyAcceleration(Gravity);
             const float scala = 100;
-            float scale = GameBase.TickTime / scala;
+            float scale = GameBase.Main?.BaseTickTime ?? 50 / scala;
             Velocity *= Inertia;
 
             base.Tick();

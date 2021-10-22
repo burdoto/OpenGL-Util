@@ -11,7 +11,6 @@ namespace OpenGL_Util.Game
 {
     public abstract class GameBase : Container, IDrawable
     {
-        public const int TickTime = 50;
         public static GameBase? Main { get; private set; }
         
         protected GameBase() : this(new RenderMatrix(new ShortLongMatrix()))
@@ -28,8 +27,8 @@ namespace OpenGL_Util.Game
             Main = this;
         }
 
-        public int BaseTickTime { get; protected set; } = -1;
-        public static long TimeDelta { get; private set; } = TickTime;
+        public int BaseTickTime { get; protected set; } = 50;
+        public static long TimeDelta { get; private set; }
         public bool Active { get; set; }
         public RenderMatrix RenderMatrix { get; }
         public GridMatrix Grid => RenderMatrix.Grid;
@@ -80,7 +79,7 @@ namespace OpenGL_Util.Game
             Active = true;
 
             long start = 0;
-            Timer timer = new Timer(TickTime);
+            Timer timer = new Timer(BaseTickTime);
             timer.Elapsed += (sender, args) =>
             {
                 Tick();
