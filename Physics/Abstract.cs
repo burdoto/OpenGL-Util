@@ -86,11 +86,11 @@ namespace OpenGL_Util.Physics
         public virtual Vector3 Gravity => Physics.Gravity;
         public Vector3 Velocity { get; set; }
         public Quaternion RotationVelocity { get; set; }
-        public float Mass { get; set; }
         public ITransform Transform => GameObject.Transform;
         public ICollider Collider => GameObject.Collider!;
+        public float Mass { get; set; }
         public float Inertia { get; set; }
-        
+
         public void ApplyAcceleration(Vector3 force) => Velocity += force * force;
 
         public override void Tick()
@@ -99,8 +99,10 @@ namespace OpenGL_Util.Physics
             if (Gravity != Vector3.Zero)
                 ApplyAcceleration(Gravity);
             const float scala = 100;
-            float scale = GameBase.Main?.BaseTickTime ?? 50 / scala;
-            Velocity *= Inertia;
+            float scale = GameBase.TickTime / scala;
+            if (Velocity.Magnitude() > 0.09f)
+                Velocity *= Inertia;
+            else Velocity = Vector3.Zero;
 
             base.Tick();
             
@@ -112,13 +114,23 @@ namespace OpenGL_Util.Physics
 
                 foreach (var other in Collider.Colliding)
                 {
-                    var energy0 = Velocity * Mass;
-                    var energy1 = other.PhysicsObject?.Velocity * other.PhysicsObject?.Mass ?? Vector3.Zero;
-                    var totalEnergy = energy0 + energy1;
+                    var kinetic0 = Velocity * Mass;
+                    var kinetic1 = other.PhysicsObject?.Velocity * other.PhysicsObject?.Mass ?? Vector3.Zero;
+                    
+                    // todo: other cases than circle collider
+                    
+                    var hitAngle = 10;
+                    var rot0 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, -hitAngle);
+                    var rot1 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, hitAngle);
+                    var totalEnergy = kinetic0 + kinetic1;
+                    // todo: needs to take angular loss into account
                     var myFactor = 1 / (other.PhysicsObject?.Mass / Mass) ?? 1;
-                    var myOutput = totalEnergy * myFactor;
-                    if (myOutput.Magnitude() > totalEnergy.Magnitude())
+                    if (myFactor > 1)
                         throw new NotSupportedException("no");
+                    kinetic0 = totalEnergy * myFactor;
+                    kinetic0 = Vector3.Transform(kinetic0, rot0);
+                    kinetic1 = totalEnergy * MathF.Abs(myFactor-1);
+                    kinetic1 = Vector3.Transform(kinetic1, rot1);
                     if (other.PhysicsObject == null)
                     {
                         // other is immovable
@@ -126,9 +138,8 @@ namespace OpenGL_Util.Physics
                     }
                     else
                     {
-                        // todo: outputs need to be translated
-                        other.PhysicsObject.Velocity = (totalEnergy - myOutput) / Mass;
-                        Velocity = myOutput / Mass;
+                        other.PhysicsObject.Velocity = kinetic1 / Mass;
+                        Velocity = kinetic0 / Mass;
                     }
                 }
             }
