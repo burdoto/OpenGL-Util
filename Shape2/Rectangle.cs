@@ -32,6 +32,7 @@ namespace OpenGL_Util.Shape2
             var vec = Position - mainPos;
             var scale = Scale;
             vec.X -= scale.X / 2;
+            vec.Y -= scale.Y / 2;
             gl.Vertex((Vector3.Transform(vec, Rotation) + mainPos).Vertex());
             vec.X += scale.X;
             gl.Vertex((Vector3.Transform(vec, Rotation) + mainPos).Vertex());
