@@ -2,7 +2,7 @@
 using SharpGL;
 using SharpGL.Enumerations;
 
-namespace OpenGL_Util.Shape2
+namespace OGLU.Shape2
 {
     public class Circle : AbstractRenderObject
     {

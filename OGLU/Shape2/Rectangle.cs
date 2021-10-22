@@ -4,7 +4,7 @@ using SharpGL;
 using SharpGL.Enumerations;
 using SharpGL.SceneGraph;
 
-namespace OpenGL_Util.Shape2
+namespace OGLU.Shape2
 {
     public class Rectangle : AbstractRenderObject
     {

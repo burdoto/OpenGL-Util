@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using OpenGL_Util.Game;
-using OpenGL_Util.Model;
+using OGLU.Game;
+using OGLU.Model;
 
-namespace OpenGL_Util.Physics
+namespace OGLU.Physics
 {
     public abstract class AbstractCollider : Container, ICollider
     {

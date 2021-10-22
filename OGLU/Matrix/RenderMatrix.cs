@@ -1,6 +1,6 @@
 ﻿using SharpGL;
 
-namespace OpenGL_Util.Matrix
+namespace OGLU.Matrix
 {
     public class RenderMatrix : IDrawable
     {

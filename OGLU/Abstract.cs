@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using OpenGL_Util.Model;
-using OpenGL_Util.Physics;
+using OGLU.Model;
+using OGLU.Physics;
 using SharpGL;
 
-namespace OpenGL_Util
+namespace OGLU
 {
     public abstract class AbstractGameObject : Container, IGameObject
     {

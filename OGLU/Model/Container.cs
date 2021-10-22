@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace OpenGL_Util.Model
+namespace OGLU.Model
 {
     public abstract class Container : ITickable
     {

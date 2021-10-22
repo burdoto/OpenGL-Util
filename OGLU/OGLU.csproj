@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <RootNamespace>OpenGL_Util</RootNamespace>
         <ApplicationIcon/>
         <StartupObject/>
         <Nullable>enable</Nullable>

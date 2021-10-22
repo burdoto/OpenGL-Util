@@ -6,7 +6,7 @@ using SharpGL.SceneGraph.Core;
 using SharpGL.SceneGraph.Primitives;
 using SharpGL.Serialization;
 
-namespace OpenGL_Util.Shape3
+namespace OGLU.Shape3
 {
     public class Mesh : IRenderObject, ILoadable
     {

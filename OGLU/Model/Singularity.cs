@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace OpenGL_Util.Model
+namespace OGLU.Model
 {
     public class DeltaTransform : ITransform
     {

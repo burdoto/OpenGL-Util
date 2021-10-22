@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace OpenGL_Util.Physics
+namespace OGLU.Physics
 {
     public sealed class CuboidCollider : AbstractCollider
     {

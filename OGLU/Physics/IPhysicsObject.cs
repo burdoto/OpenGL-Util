@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace OpenGL_Util.Physics
+namespace OGLU.Physics
 {
     public static class Physics
     {

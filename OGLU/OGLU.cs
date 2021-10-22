@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using OpenGL_Util.Model;
-using OpenGL_Util.Physics;
+using OGLU.Model;
+using OGLU.Physics;
 using SharpGL;
 using SharpGL.SceneGraph;
 
-namespace OpenGL_Util
+namespace OGLU
 {
     public interface IContainer : IDisposable
     {

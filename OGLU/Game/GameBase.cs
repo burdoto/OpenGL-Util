@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Timers;
-using OpenGL_Util.Matrix;
-using OpenGL_Util.Model;
+using OGLU.Matrix;
+using OGLU.Model;
 using SharpGL;
 
-namespace OpenGL_Util.Game
+namespace OGLU.Game
 {
     public abstract class GameBase : Container, IDrawable
     {

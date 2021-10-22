@@ -5,7 +5,7 @@ using SharpGL;
 using SharpGL.Enumerations;
 using SharpGL.SceneGraph;
 
-namespace OpenGL_Util.Shape3
+namespace OGLU.Shape3
 {
     public class Cuboid : AbstractRenderObject
     {

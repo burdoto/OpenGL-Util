@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
-namespace OpenGL_Util.Matrix
+namespace OGLU.Matrix
 {
     public abstract class GridMatrix
     {

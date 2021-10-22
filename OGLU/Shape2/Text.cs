@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using SharpGL;
 
-namespace OpenGL_Util.Shape2
+namespace OGLU.Shape2
 {
     public class Text : AbstractRenderObject
     {
