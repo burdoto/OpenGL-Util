@@ -38,7 +38,7 @@ namespace OpenGL_Util
         public IGameObject GameObject { get; }
         public ITransform Transform { get; }
 
-        protected AbstractRenderObject(IGameObject gameObject) : this(gameObject, gameObject.Transform)
+        protected AbstractRenderObject(IGameObject gameObject) : this(gameObject, gameObject)
         {
         }
 
@@ -48,9 +48,9 @@ namespace OpenGL_Util
             Transform = transform;
         }
 
-        public virtual Vector3 Position => GameObject.Position;
-        public virtual Quaternion Rotation => GameObject.Rotation;
-        public virtual Vector3 Scale => GameObject.Scale;
+        public virtual Vector3 Position => Transform.Position;
+        public virtual Quaternion Rotation => Transform.Rotation;
+        public virtual Vector3 Scale => Transform.Scale;
         public abstract void Draw(OpenGL gl, ITransform camera);
         public Action<OpenGL>? PostBegin;
 

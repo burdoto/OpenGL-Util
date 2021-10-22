@@ -11,7 +11,7 @@ namespace OpenGL_Util.Game
 {
     public abstract class GameBase : Container, IDrawable
     {
-        public const int TickTime = 10;
+        public const int TickTime = 20;
         
         public static GameBase? Main { get; private set; }
         

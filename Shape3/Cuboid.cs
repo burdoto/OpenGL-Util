@@ -22,7 +22,7 @@ namespace OpenGL_Util.Shape3
             BACK = -0x4
         }
 
-        public Cuboid(IGameObject gameObject, Color color) : this(gameObject, gameObject.Transform, color)
+        public Cuboid(IGameObject gameObject, Color color) : this(gameObject, gameObject, color)
         {
         }
 
