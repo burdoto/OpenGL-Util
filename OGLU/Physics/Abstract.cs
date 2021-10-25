@@ -123,23 +123,24 @@ namespace OGLU.Physics
 
                     // todo: other cases than circle collider
 
-                    var hitAngle = 10;
-                    var rot0 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, -hitAngle);
-                    var rot1 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, hitAngle);
+                    var p1 = collision.Position;
+                    var p2 = p1 + Vector3.UnitY;
+                    var p3 = collision.Active.Position;
+                    float hitAngle = MathF.Atan2(p3.Y - p1.Y, p3.X - p2.X) - MathF.Atan2(p2.Y - p1.Y, p2.X - p1.X);
+                    var rot0 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, hitAngle);
+                    var rot1 = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, -hitAngle);
                     var totalEnergy = kinetic0 + kinetic1;
                     // todo: needs to take angular loss into account
                     kinetic0 -= kinetic1;
                     float myFactor = 1 / (other.PhysicsObject?.Mass / Mass) ?? 1;
                     if (myFactor > 1)
                         throw new NotSupportedException("no");
-                    kinetic0 = totalEnergy * myFactor;
-                    kinetic0 = Vector3.Transform(kinetic0, rot0);
-                    kinetic1 = totalEnergy * MathF.Abs(myFactor - 1);
-                    kinetic1 = Vector3.Transform(kinetic1, rot1);
+                    kinetic0 = Vector3.Transform(totalEnergy * myFactor, rot0);
+                    kinetic1 = Vector3.Transform(totalEnergy * MathF.Abs(myFactor - 1), rot1);
                     if (other.PhysicsObject == null)
                     {
                         // other is immovable
-                        Velocity = totalEnergy / Mass;
+                        Velocity = kinetic0 / Mass;
                     }
                     else
                     {
