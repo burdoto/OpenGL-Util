@@ -8,6 +8,8 @@ using SharpGL.SceneGraph;
 
 namespace OGLU
 {
+    public delegate void GlHandler(OpenGL gl);
+    
     public interface IContainer : IDisposable
     {
         IEnumerable<IDisposable> Children { get; }

@@ -38,7 +38,7 @@ namespace OGLU
 
     public abstract class AbstractRenderObject : IRenderObject
     {
-        public Action<OpenGL>? PostBegin;
+        public GlHandler? PostBegin;
 
         protected AbstractRenderObject(IGameObject gameObject) : this(gameObject, gameObject)
         {
@@ -58,9 +58,6 @@ namespace OGLU
         public virtual Vector3 Scale => Transform.Scale;
         public abstract void Draw(OpenGL gl, ITransform camera);
 
-        protected void CallPostBegin(OpenGL gl)
-        {
-            PostBegin?.Invoke(gl);
-        }
+        protected void CallPostBegin(OpenGL gl) => PostBegin?.Invoke(gl);
     }
 }

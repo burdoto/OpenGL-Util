@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using OGLU.Game;
 using OGLU.Model;
+using OGLU.Shape2;
+using OGLU.Shape3;
+using SharpGL;
+using SharpGL.SceneGraph;
 
 namespace OGLU.Physics
 {
@@ -135,18 +140,14 @@ namespace OGLU.Physics
                     float myFactor = 1 / (other.PhysicsObject?.Mass / Mass) ?? 1;
                     if (myFactor > 1)
                         throw new NotSupportedException("no");
-                    kinetic0 = Vector3.Transform(totalEnergy * myFactor, rot0);
-                    kinetic1 = Vector3.Transform(totalEnergy * MathF.Abs(myFactor - 1), rot1);
-                    if (other.PhysicsObject == null)
-                    {
-                        // other is immovable
-                        Velocity = kinetic0 / Mass;
-                    }
-                    else
-                    {
-                        other.PhysicsObject.Velocity = kinetic1 / Mass;
-                        Velocity = kinetic0 / Mass;
-                    }
+                    kinetic0 = Vector3.Transform(totalEnergy * myFactor, rot0) / Mass;
+                    kinetic1 = Vector3.Transform(totalEnergy - kinetic0, rot1) / (other.PhysicsObject?.Mass ?? 1);
+                    
+                    AddDebugLines(collision, Velocity, kinetic0, kinetic1);
+
+                    if (other.PhysicsObject != null) 
+                        other.PhysicsObject.Velocity = kinetic1;
+                    Velocity = kinetic0;
                 }
             }
 
@@ -154,5 +155,38 @@ namespace OGLU.Physics
             GameObject.Transform.Position += Velocity * scale;
             GameObject.Transform.Rotation *= RotationVelocity * scale;
         }
+
+        #region Debug Code
+        private readonly ISet<IRenderObject> DebugLines = new HashSet<IRenderObject>();
+        private static readonly GlHandler impactColor = gl => gl.Color(Color.Red);
+        private static readonly GlHandler k0Color = gl => gl.Color(Color.Green);
+        private static readonly GlHandler k1Color = gl => gl.Color(Color.Blue);
+        private delegate IRenderObject LineTool(IGameObject go, Vector3 pos, Vector3 vec, GlHandler color);
+
+        [Conditional("DEBUG")]
+        private void AddDebugLines(Collision collision, Vector3 impact, Vector3 kinetic0, Vector3 kinetic1)
+        {
+            // clear DebugLines from object
+            GameObject.RenderObjects.RemoveAll(DebugLines.Remove);
+            var lineTool = Collider.IsTwoDimensional()
+                ? (LineTool)((go, pos, vec, clr) => new Line2(go, new Singularity(pos, vec)){PostBegin = clr})
+                : (go, pos, vec, clr) => new Line3(go, new Singularity(pos, vec)){PostBegin = clr};
+            var pos0 = GameObject.Position;
+            var pos1 = collision.Other.Position;
+            IRenderObject obj;
+            obj = new Circle(GameObject, new Singularity(collision.Position, new Vector3(0.5f, 0, 0))){PostBegin = impactColor};
+            GameObject.RenderObjects.Add(obj);
+            DebugLines.Add(obj);
+            obj = lineTool(GameObject, pos0, impact, impactColor);
+            GameObject.RenderObjects.Add(obj);
+            DebugLines.Add(obj);
+            obj = lineTool(GameObject, pos0, kinetic0, k0Color);
+            GameObject.RenderObjects.Add(obj);
+            DebugLines.Add(obj);
+            obj = lineTool(GameObject, pos1, kinetic1, k1Color);
+            GameObject.RenderObjects.Add(obj);
+            DebugLines.Add(obj);
+        }
+        #endregion
     }
 }

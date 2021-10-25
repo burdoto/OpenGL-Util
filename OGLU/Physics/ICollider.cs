@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace OGLU.Physics
@@ -34,6 +35,16 @@ namespace OGLU.Physics
         bool CollidesWith(ICollider other, ref Vector3 v3, bool recursive = false, float z = 0);
         bool PointInside(Vector2 point);
         bool PointInside(Vector3 point);
+    }
+
+    public static class ColliderExtensions
+    {
+        public static bool IsTwoDimensional(this ICollider collider) => collider.ColliderType switch
+        {
+            ColliderType.d2_Rect => true,
+            ColliderType.d2_Circle => true,
+            _ => false
+        };
     }
 
     public readonly struct Collision

@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <ApplicationIcon/>
-        <StartupObject/>
+        <ApplicationIcon />
+        <StartupObject />
         <Nullable>enable</Nullable>
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
@@ -14,20 +14,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SharpGL.SceneGraph" Version="3.1.1"/>
-        <PackageReference Include="SharpGL.Serialization" Version="3.1.1"/>
+        <PackageReference Include="SharpGL.SceneGraph" Version="3.1.1" />
+        <PackageReference Include="SharpGL.Serialization" Version="3.1.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="ObjParser\**"/>
+        <Compile Remove="ObjParser\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Remove="ObjParser\**"/>
+        <EmbeddedResource Remove="ObjParser\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="ObjParser\**"/>
+        <None Remove="ObjParser\**" />
     </ItemGroup>
 
 </Project>
