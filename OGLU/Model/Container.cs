@@ -92,24 +92,29 @@ namespace OGLU.Model
             return _children.Where(it => it.GetType() == typeof(T)).Cast<T>();
         }
 
+        [Obsolete]
         protected virtual bool _Load()
         {
             return true;
         }
 
+        [Obsolete]
         protected virtual bool _Enable()
         {
             return true;
         }
 
+        [Obsolete]
         protected virtual void _Tick()
         {
         }
 
+        [Obsolete]
         protected virtual void _Disable()
         {
         }
 
+        [Obsolete]
         protected virtual void _Unload()
         {
         }
