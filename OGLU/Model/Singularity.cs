@@ -37,6 +37,8 @@ namespace OGLU.Model
 
     public class Singularity : ITransform
     {
+        public static readonly Singularity Default = new Singularity();
+        
         public Singularity() : this(Vector3.Zero)
         {
         }

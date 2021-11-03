@@ -24,7 +24,7 @@ namespace OGLU
     public interface ILoadable : IDisposable
     {
         bool Loaded { get; }
-        bool Load();
+        bool Load(OpenGL gl);
         void Unload();
     }
 

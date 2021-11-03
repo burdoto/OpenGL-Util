@@ -70,16 +70,21 @@ namespace OGLU.Game
             return base.AddChild(container);
         }
 
+        public override bool Load(OpenGL gl)
+        {
+            
+            if (!base.Load(gl))
+                throw new Exception("Could not load game");
+            if (!Enable())
+                throw new Exception("Could not enable game");
+            Active = true;
+            return base.Load(gl);
+        }
+
         public void Run()
         {
             try
             {
-                if (!Load())
-                    throw new Exception("Could not load game");
-                if (!Enable())
-                    throw new Exception("Could not enable game");
-                Active = true;
-
                 long start = 0;
                 Timer timer = new Timer(TickTime);
                 timer.Elapsed += (sender, args) =>

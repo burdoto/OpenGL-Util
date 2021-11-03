@@ -23,7 +23,7 @@ namespace OGLU.Shape3
 
         public byte[] ColorArray => throw new NotSupportedException();
 
-        public bool Load()
+        public bool Load(OpenGL gl)
         {
             Polygon = (SerializationEngine.Instance.LoadScene(File.FullName).SceneContainer.Children[0] as Polygon)!;
             return Loaded = true;

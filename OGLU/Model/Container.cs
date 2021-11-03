@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SharpGL;
 
 namespace OGLU.Model
 {
@@ -14,12 +15,12 @@ namespace OGLU.Model
         public bool Enabled => Loaded && _enabled;
         public virtual IEnumerable<IDisposable> Children => _children;
 
-        public virtual bool Load()
+        public virtual bool Load(OpenGL gl)
         {
             Debug.WriteLine("Loading " + this);
             foreach (var container in Children)
                 if (container is ILoadable loadable)
-                    loadable.Load();
+                    loadable.Load(gl);
             return !Loaded && (Loaded = _Load());
         }
 
