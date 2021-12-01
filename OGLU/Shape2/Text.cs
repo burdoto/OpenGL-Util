@@ -5,12 +5,14 @@ namespace OGLU.Shape2
 {
     public class Text : AbstractRenderObject
     {
-        public Text(IGameObject gameObject) : base(gameObject)
+        public Text(IGameObject gameObject, string text = "") : base(gameObject)
         {
+            Content = text;
         }
 
-        public Text(IGameObject gameObject, ITransform transform) : base(gameObject, transform)
+        public Text(IGameObject gameObject, ITransform transform, string text = "") : base(gameObject, transform)
         {
+            Content = text;
         }
 
         public string Content { get; set; }
