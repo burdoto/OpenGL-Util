@@ -78,6 +78,13 @@ namespace OGLU
         public Vector3 Left => Rotation.Left();
     }
 
+    public interface IGlInitializer
+    {
+        bool Initialized { get; }
+
+        void Initialize(OpenGL gl);
+    }
+
     public static class Extensions
     {
         public static Vertex Vertex(this Vector3 a)
@@ -187,6 +194,11 @@ namespace OGLU
                 2 * (it.X * it.Y + it.W * it.Z),
                 2 * (it.X * it.Z - it.W * it.Y)
             );
+        }
+
+        public static Quaternion Rotation(this Vector3 a, float angle)
+        {
+            return new Quaternion(a.Normalize(), angle);
         }
 
         public static Vector3 EulerAngles(this Quaternion q)
