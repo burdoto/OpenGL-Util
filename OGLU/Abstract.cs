@@ -10,6 +10,10 @@ namespace OGLU
 {
     public abstract class AbstractGameObject : Container, IGameObject
     {
+        protected AbstractGameObject(short metadata = 0) : this(new Singularity(), metadata)
+        {
+        }
+
         protected AbstractGameObject(Singularity transform, short metadata = 0)
         {
             Transform = transform;

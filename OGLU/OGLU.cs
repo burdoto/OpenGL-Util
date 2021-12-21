@@ -87,6 +87,10 @@ namespace OGLU
 
     public static class Extensions
     {
+        public static Vector3 To3Dim(this Vector2 it, float z) => new Vector3(it, z);
+        public static Vector4 To4Dim(this Vector2 it, float z, float w = 0) => new Vector4(it, z, w);
+        public static Vector4 To4Dim(this Vector3 it, float w) => new Vector4(it, w);
+        
         public static Vertex Vertex(this Vector3 a)
         {
             return new Vertex(a.X, a.Y, a.Z);
@@ -164,7 +168,22 @@ namespace OGLU
             return MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
         }
 
+        public static float Magnitude(this Vector4 a)
+        {
+            return MathF.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z + a.W * a.W);
+        }
+
+        public static Vector2 Normalize(this Vector2 a)
+        {
+            return a / a.Magnitude();
+        }
+
         public static Vector3 Normalize(this Vector3 a)
+        {
+            return a / a.Magnitude();
+        }
+
+        public static Vector4 Normalize(this Vector4 a)
         {
             return a / a.Magnitude();
         }
