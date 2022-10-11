@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
+using Rndr.Model;
 
-namespace OGLU.Physics
+namespace Rndr.Physics
 {
     public static class Physics
     {

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Rndr.Model;
 
-namespace OGLU.Physics
+namespace Rndr.Physics
 {
     public enum ColliderType
     {

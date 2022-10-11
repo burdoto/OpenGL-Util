@@ -2,26 +2,26 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SharpGL;
+using Silk.NET.OpenGL;
 
-namespace OGLU.Model
+namespace Rndr.Model
 {
     public abstract class Container : ITickable
     {
-        protected readonly List<IDisposable> _children = new List<IDisposable>();
+        protected readonly List<IDisposable> _children = new();
         private bool _enabled;
         public bool Loaded { get; private set; }
 
         public bool Enabled => Loaded && _enabled;
         public virtual IEnumerable<IDisposable> Children => _children;
 
-        public virtual bool Load(OpenGL gl)
+        public virtual bool Load(Context ctx)
         {
             Debug.WriteLine("Loading " + this);
             foreach (var container in Children)
                 if (container is ILoadable loadable)
-                    loadable.Load(gl);
-            return !Loaded && (Loaded = _Load());
+                    loadable.Load(ctx);
+            return Loaded = true;
         }
 
         public virtual bool Enable()
@@ -30,17 +30,16 @@ namespace OGLU.Model
             foreach (var container in Children)
                 if (container is IEnableable enableable)
                     enableable.Enable();
-            return Loaded && (_enabled = _Enable());
+            return Loaded && (_enabled = true);
         }
 
-        public virtual void Tick()
+        public virtual void Tick(Context ctx)
         {
             if (!Enabled)
                 return;
-            _Tick();
             foreach (var container in Children)
                 if (container is ITickable tickable)
-                    tickable.Tick();
+                    tickable.Tick(ctx);
         }
 
         public virtual void Disable()
@@ -51,26 +50,24 @@ namespace OGLU.Model
             foreach (var container in Children)
                 if (container is IEnableable enableable)
                     enableable.Disable();
-            _Disable();
             _enabled = false;
         }
 
-        public virtual void Unload()
+        public virtual void Unload(Context ctx)
         {
             if (!Loaded)
                 return;
             Debug.WriteLine("Unloading " + this);
             foreach (var container in Children)
                 if (container is ILoadable loadable)
-                    loadable.Unload();
-            _Unload();
+                    loadable.Unload(ctx);
             Loaded = false;
         }
 
         public virtual void Dispose()
         {
             Disable();
-            Unload();
+            Unload(Context.Current);
         }
 
 
@@ -90,33 +87,6 @@ namespace OGLU.Model
         public IEnumerable<T> GetChildren<T>() where T : IDisposable
         {
             return _children.Where(it => it.GetType() == typeof(T)).Cast<T>();
-        }
-
-        [Obsolete]
-        protected virtual bool _Load()
-        {
-            return true;
-        }
-
-        [Obsolete]
-        protected virtual bool _Enable()
-        {
-            return true;
-        }
-
-        [Obsolete]
-        protected virtual void _Tick()
-        {
-        }
-
-        [Obsolete]
-        protected virtual void _Disable()
-        {
-        }
-
-        [Obsolete]
-        protected virtual void _Unload()
-        {
         }
     }
 }

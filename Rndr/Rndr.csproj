@@ -5,18 +5,16 @@
         <ApplicationIcon />
         <StartupObject />
         <Nullable>enable</Nullable>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <RootNamespace>Rndr</RootNamespace>
+        <AssemblyName>Rndr</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Optimize>true</Optimize>
     </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="SharpGL.SceneGraph" Version="3.1.1" />
-        <PackageReference Include="SharpGL.Serialization" Version="3.1.1" />
-    </ItemGroup>
 
     <ItemGroup>
         <Compile Remove="ObjParser\**" />
@@ -28,6 +26,11 @@
 
     <ItemGroup>
         <None Remove="ObjParser\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Silk.NET.OpenGL" Version="2.16.0" />
+      <PackageReference Include="Silk.NET.Windowing.Common" Version="2.16.0" />
     </ItemGroup>
 
 </Project>

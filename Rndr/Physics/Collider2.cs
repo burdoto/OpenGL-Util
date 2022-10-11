@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Numerics;
+using Rndr.Model;
 
-namespace OGLU.Physics
+namespace Rndr.Physics
 {
     public sealed class RectCollider : AbstractCollider
     {

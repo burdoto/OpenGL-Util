@@ -4,14 +4,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using OGLU.Game;
-using OGLU.Model;
-using OGLU.Shape2;
-using OGLU.Shape3;
-using SharpGL;
-using SharpGL.SceneGraph;
+using Rndr.Game;
+using Rndr.Model;
+using Rndr.Shape2;
 
-namespace OGLU.Physics
+//using RNDR.Shape3;
+
+namespace Rndr.Physics
 {
     public abstract class AbstractCollider : Container, ICollider
     {
@@ -37,15 +36,17 @@ namespace OGLU.Physics
         public abstract bool PointInside(Vector2 point);
         public abstract bool PointInside(Vector3 point);
 
-        protected override void _Tick()
+        public override void Tick(Context ctx)
         {
+            base.Tick(ctx);
+            
             if (!ActiveCollider)
                 return;
 
             Collisions.Clear();
             var pos = Vector3.Zero;
-            foreach (var go in GameBase.Main?.Grid.GetGameObjects() ?? Array.Empty<IGameObject>())
-                if (go.Collider != null)
+            foreach (var child in ctx.game.Children)
+                if (child is IGameObject { Collider: { } } go)
                     if (CollidesWith(go.Collider, ref pos))
                         Collisions.Add(new Collision(GameObject, go, pos));
         }
@@ -99,19 +100,19 @@ namespace OGLU.Physics
             Velocity += force * force;
         }
 
-        public override void Tick()
+        public override void Tick(Context ctx)
         {
             // apply gravity to velocity
             if (Gravity != Vector3.Zero)
                 ApplyAcceleration(Gravity);
             const float scala = 100;
-            float scale = GameBase.TickTime / scala;
+            float scale = ctx.deltaTime / scala;
             // apply inertia to velocity
             if (Velocity.Magnitude() > 0.09f)
                 Velocity *= Inertia;
             else Velocity = Vector3.Zero;
 
-            base.Tick();
+            base.Tick(ctx);
 
             // check for collisions
             if (Collider.Collisions.Count > 0 && Velocity != Vector3.Zero)
@@ -158,9 +159,10 @@ namespace OGLU.Physics
 
         #region Debug Code
         private readonly ISet<IRenderObject> DebugLines = new HashSet<IRenderObject>();
-        private static readonly GlHandler impactColor = gl => gl.Color(Color.Red);
-        private static readonly GlHandler k0Color = gl => gl.Color(Color.Green);
-        private static readonly GlHandler k1Color = gl => gl.Color(Color.Blue);
+        private static readonly GlHandler defaultColor = ctx => ctx.gl.ColorMask(true, true, true, true);
+        private static readonly GlHandler impactColor = ctx => ctx.gl.ColorMask(true, false, false, true);
+        private static readonly GlHandler k0Color = ctx => ctx.gl.ColorMask(false, true, false, true);
+        private static readonly GlHandler k1Color = ctx => ctx.gl.ColorMask(false, false, true, true);
         private delegate IRenderObject LineTool(IGameObject go, Vector3 pos, Vector3 vec, GlHandler color);
 
         [Conditional("DEBUG")]
@@ -169,12 +171,12 @@ namespace OGLU.Physics
             // clear DebugLines from object
             GameObject.RenderObjects.RemoveAll(DebugLines.Remove);
             var lineTool = Collider.IsTwoDimensional()
-                ? (LineTool)((go, pos, vec, clr) => new Line2(go, new Singularity(pos, vec)){PostBegin = clr})
-                : (go, pos, vec, clr) => new Line3(go, new Singularity(pos, vec)){PostBegin = clr};
+                ? (LineTool)((go, pos, vec, clr) => new Line2(go, new Singularity(pos, vec)){PreDraw = clr, PostDraw = defaultColor})
+                : throw new NotImplementedException();//(go, pos, vec, clr) => new Line3(go, new Singularity(pos, vec)){PostBegin = clr};
             var pos0 = GameObject.Position;
             var pos1 = collision.Other.Position;
             IRenderObject obj;
-            obj = new Circle(GameObject, new Singularity(collision.Position, new Vector3(0.5f, 0, 0))){PostBegin = impactColor};
+            obj = new Circle(GameObject, new Singularity(collision.Position, new Vector3(0.5f, 0, 0))){PreDraw = impactColor, PostDraw = defaultColor};
             GameObject.RenderObjects.Add(obj);
             DebugLines.Add(obj);
             obj = lineTool(GameObject, pos0, impact, impactColor);
