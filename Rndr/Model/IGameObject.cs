@@ -20,27 +20,21 @@ public interface IGameObject : ITransform, ITickable
 
 public abstract class AbstractGameObject : Container, IGameObject
 {
-    protected AbstractGameObject(short metadata = 0) : this(new Singularity(), metadata)
+    protected AbstractGameObject(Singularity? transform = null, short metadata = 0)
     {
-    }
-
-    protected AbstractGameObject(Singularity transform, short metadata = 0)
-    {
-        Transform = transform;
+        Transform = transform ?? new Singularity();
         Metadata = metadata;
     }
 
     public override IEnumerable<IDisposable> Children => new IDisposable?[] { Collider, PhysicsObject }
         .Where(x => x != null)
         .Select(x => x!)
+        .Concat(RenderObjects)
         .Concat(_children);
 
     public Singularity Transform { get; }
 
-    public virtual Vector3 Position => Transform.Position;
-    public virtual Quaternion Rotation => Transform.Rotation;
-    public virtual Vector3 Scale => Transform.Scale;
-    public List<IRenderObject> RenderObjects { get; } = new List<IRenderObject>();
+    public List<IRenderObject> RenderObjects { get; } = new();
     public IPhysicsObject? PhysicsObject { get; protected set; }
     public ICollider? Collider { get; protected set; }
     public short Metadata { get; set; }

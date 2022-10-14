@@ -1,6 +1,8 @@
-﻿using Rndr;
+﻿using System.Numerics;
+using Rndr;
 using Rndr.Game;
 using Rndr.Model;
+using Rndr.Shape2;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 
@@ -26,5 +28,18 @@ public class Program
 
 public sealed class TetrisGame : GameBase
 {
+    public TetrisGame()
+    {
+        AddChild(new TestObj());
+    }
+
     public override Camera Camera { get; } = new();
+}
+
+public sealed class TestObj : AbstractGameObject
+{
+    public TestObj()
+    {
+        RenderObjects.Add(new Rect(this));
+    }
 }

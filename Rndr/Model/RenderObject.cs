@@ -33,9 +33,9 @@ public abstract class AbstractRenderObject : IRenderObject
     public IGameObject GameObject { get; }
     public ITransform Transform { get; }
 
-    public virtual Vector3 Position => Transform.Position;
-    public virtual Quaternion Rotation => Transform.Rotation;
-    public virtual Vector3 Scale => Transform.Scale;
+    public Vector3 Position => Transform.Position;
+    public Quaternion Rotation => Transform.Rotation;
+    public Vector3 Scale => Transform.Scale;
     protected abstract unsafe VertexData VertexData { get; }
 
     public unsafe bool Load(Context ctx)
@@ -52,7 +52,7 @@ public abstract class AbstractRenderObject : IRenderObject
 
         var data = VertexData;
         gl.BufferData(BufferTargetARB.ArrayBuffer, data.ptrSize * sizeof(float), data.ptr, BufferUsageARB.StaticDraw);
-        gl.VertexAttribPointer(0, data.size, VertexAttribPointerType.Float, data.normalized, data.stride, null);
+        gl.VertexAttribPointer(0, data.arraySize, VertexAttribPointerType.Float, data.normalized, data.stride, null);
         gl.EnableVertexAttribArray(0);
         PostAttributes?.Invoke(ctx);
 
@@ -109,7 +109,7 @@ public unsafe struct VertexData
     public float* ptr { get; }
     public uint ptrSize { get; }
     public uint stride { get; init; } = 0;
-    public int size { get; init; } = 0;
+    public int arraySize { get; init; } = 0;
     public bool normalized { get; init; } = false;
     public PrimitiveType type { get; }
     public uint arrayCount { get; }

@@ -42,39 +42,32 @@ public sealed class Context : IDisposable
         this.game = game;
         
         tickTimer = new Timer(game.TickTime);
-        try
+        long start = 0;
+        tickTimer.Elapsed += (_, _) =>
         {
-            game.Enable();
-            long start = 0;
-            tickTimer.Elapsed += (_, _) =>
+            try
             {
-                try
-                {
-                    game.Tick(this);
-                    deltaTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
-                    start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("Exception occurred in tick, shutting down!\n" + e);
-                    game.Active = false;
-                }
+                game.Tick(this);
+                deltaTime = DateTimeOffset.Now.ToUnixTimeMilliseconds() - start;
+                start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Exception occurred in tick, shutting down!\n" + e);
+                game.Active = false;
+            }
 
-                if (!game.Active)
-                    tickTimer.Dispose();
-            };
-            tickTimer.Disposed += (_, _) => game.Dispose();
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine("Could not start Game tick timer\n" + e);
-        }
+            if (!game.Active)
+                tickTimer.Dispose();
+        };
+        tickTimer.Disposed += (_, _) => game.Dispose();
         
-        window.Load += () => game.Load(this);
         window.FramebufferResize += Resize;
         window.Render += (frameTime) => game.Draw(this, game.Camera, frameTime);
         window.Closing += Dispose;
         
+        game.Load(this);
+        game.Enable();
         tickTimer.Start();
         window.Run();
     }

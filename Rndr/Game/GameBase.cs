@@ -25,13 +25,16 @@ namespace Rndr.Game
 
         public override bool Load(Context ctx)
         {
-            
             if (!base.Load(ctx))
-                throw new Exception("Could not load game");
-            if (!Enable())
-                throw new Exception("Could not enable game");
-            Active = true;
-            return base.Load(ctx);
+                throw new Exception("Could not load game components");
+            return Loaded;
+        }
+
+        public override bool Enable()
+        {
+            if (!base.Enable())
+                throw new Exception("Could not enable game components");
+            return Enabled && (Active = true);
         }
     }
 }

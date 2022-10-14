@@ -17,6 +17,8 @@ namespace Rndr.Model
 
         public virtual bool Load(Context ctx)
         {
+            if (Loaded)
+                return false;
             Debug.WriteLine("Loading " + this);
             foreach (var container in Children)
                 if (container is ILoadable loadable)
@@ -26,6 +28,8 @@ namespace Rndr.Model
 
         public virtual bool Enable()
         {
+            if (!Loaded || Enabled)
+                return false;
             Debug.WriteLine("Enabling " + this);
             foreach (var container in Children)
                 if (container is IEnableable enableable)
